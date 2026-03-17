@@ -1,6 +1,6 @@
 <?php
 
-define('BASE_URL',          'http://localhost/BaseExam/');
+define('BASE_URL',          'http://localhost/da1hl/DA1/');
 
 define('PATH_ROOT',         __DIR__ . '/../');
 
@@ -20,7 +20,7 @@ define('DB_HOST',     'localhost');
 define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_NAME',     '');
+define('DB_NAME',     'duan1_wd21103');
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

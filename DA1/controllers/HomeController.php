@@ -4,6 +4,10 @@ class HomeController
 {
     public function index() 
     {
-        require_once PATH_VIEW . 'main.php';
+
+     $products = (new Product())->getAll();
+        $content = PATH_VIEW . 'home.php';
+        
+        require PATH_VIEW . 'layout/main.php';
     }
 }
