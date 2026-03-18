@@ -1,3 +1,3 @@
-<footer class="bg-dark text-white text-center p-3 mt-4">
-  © 2026 Book Store
+<footer class="bg-info-subtle text-black text-center p-3 mt-4">
+  Website bán sách, truyện tranh - BookVerse
 </footer>

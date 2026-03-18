@@ -1,6 +1,13 @@
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-warning-subtle">
   <div class="container">
-    <a class="navbar-brand" href="<?= BASE_URL ?>">Book Store</a>
+    <a class="navbar-brand text-black" href="<?= BASE_URL ?>">BookVerse</a>
+    <nav>
+      <a href="">Trang chủ</a>
+      <a href="">Sản Phẩm</a>
+      <a href="">Liên Hệ</a>
+      <a href="">Tin Tức</a>
+      
+    </nav>
 
     <a href="<?= BASE_URL ?>?action=cart" class="btn btn-light">
       Giỏ hàng
