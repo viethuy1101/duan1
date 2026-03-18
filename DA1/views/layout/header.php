@@ -2,8 +2,8 @@
   <div class="container">
     <a class="navbar-brand text-black" href="<?= BASE_URL ?>">BookVerse</a>
     <nav>
-      <a href="">Trang chủ</a>
-      <a href="">Sản Phẩm</a>
+      <a href="<?= BASE_URL ?>">Trang chủ</a>
+      <a href="<?= BASE_URL ?>?action=create">Thêm sách</a>
       <a href="">Liên Hệ</a>
       <a href="">Tin Tức</a>
       

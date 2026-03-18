@@ -1,4 +1,6 @@
-<h3 class="mb-4 fw-bold">📚 Danh sách sách</h3>
+
+<img src="<?= BASE_ASSETS_UPLOADS . 'img/banner.jpg' ?>" alt="Banner">
+<h3 class="mb-4 fw-bold">Chào mừng bạn đến với BookVerse!</h3>
 
 <div class="row">
 <?php foreach($products as $item): ?>
