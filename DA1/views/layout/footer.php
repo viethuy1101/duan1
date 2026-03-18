@@ -1,4 +1,12 @@
-<footer class="footer-area bg-light p-5 mt-4 text-black text-center">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <footer class="footer-area bg-light p-5 mt-4 text-black text-center">
     <div class="container-xl text-start"> <!- Thêm container để giới hạn chiều rộng và căn lề trái ->
         <div class="row row-cols-1 row-cols-md-3 g-4"> <!- Tạo 3 cột, g-4 để có khoảng cách ->
             
@@ -76,3 +84,5 @@
     <div class="footer-bottom mt-5 border-top pt-3 text-muted">
     </div>
 </footer>
+</body>
+</html>

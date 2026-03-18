@@ -1,4 +1,12 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
 <img src="<?= BASE_ASSETS_UPLOADS . 'img/banner.jpg' ?>" alt="Banner">
 <h3 class="mb-4 fw-bold">Chào mừng bạn đến với BookVerse!</h3>
 
@@ -77,3 +85,5 @@
 
 
 </div>
+</body>
+</html>
