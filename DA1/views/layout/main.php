@@ -9,7 +9,8 @@
 </head>
 <body>  
 
-<?php require PATH_VIEW . 'layout/header.php'; ?>
+<?php require PATH_VIEW . 'layout/header.php';
+ ?>
 
 <div class="container mt-4">
     <?php include $content; ?> 

@@ -46,7 +46,7 @@
         <div class="col-6 col-md-3">
             <div class="card h-100 border-0 shadow-sm product-card">
                 <div class="p-3">
-                    <img src="path/to/clean-code.jpg" class="card-img-top rounded-3" alt="Clean Code" style="height: 200px; object-fit: cover;">
+                    <img src="<?= BASE_ASSETS_UPLOADS ?>img/product1.jpg" class="card-img-top rounded-3" alt="Clean Code" style="height: 200px; object-fit: cover;">
                 </div>
                 <div class="card-body text-center pt-0">
                     <h6 class="fw-bold mb-1">Clean Code</h6>
@@ -69,7 +69,7 @@
             <div class="col-6 col-md-3">
                 <div class="card h-100 border-0 shadow-sm featured-item">
                     <div class="position-relative">
-                        <img src="path/to/sach-1.jpg" class="card-img p-2 rounded-4" alt="Sách" style="height: 250px; object-fit: contain;">
+                        <img src="img/product1.jpg" class="card-img p-2 rounded-4" alt="Sách" style="height: 250px; object-fit: contain;">
                         <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Nổi bật</span>
                     </div>
                     <div class="card-body text-center">
