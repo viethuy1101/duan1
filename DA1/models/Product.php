@@ -18,10 +18,10 @@ class Product extends BaseModel
         return $stmt->fetch();
     }
 
-    public function create($data)
-    {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} (title, author, price, description, image) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$data['title'], $data['author'], $data['price'], $data['description'], $data['image']]);
-        return $this->pdo->lastInsertId();
-    }
+    // public function create($data)
+    // {
+    //     $stmt = $this->pdo->prepare("INSERT INTO {$this->table} (title, author, price, description, image) VALUES (?, ?, ?, ?, ?)");
+    //     $stmt->execute([$data['title'], $data['author'], $data['price'], $data['description'], $data['image']]);
+    //     return $this->pdo->lastInsertId();
+    // }
 }

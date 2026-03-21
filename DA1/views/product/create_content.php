@@ -1,4 +1,4 @@
-<h3>Thêm sách mới</h3>
+<!-- <h3>Thêm sách mới</h3>
 
 <form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
@@ -22,4 +22,4 @@
         <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
     </div>
     <button type="submit" class="btn btn-primary">Thêm sách</button>
-</form>
+</form> -->

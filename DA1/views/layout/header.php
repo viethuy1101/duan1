@@ -23,7 +23,7 @@
                     <a class="nav-link active" href="index.php">Trang chủ</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" href="<?= BASE_URL ?>?action=create">Thêm sách</a>
+                  <!-- <a class="nav-link active" href="<?= BASE_URL ?>?action=create">Thêm sách</a> -->
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
@@ -52,7 +52,7 @@
             </form>
 
             <div class="d-flex align-items-center ms-auto">
-                <a href="cart.php" class="nav-link position-relative me-3 text-dark">
+                <a href="cart.php" class="nav-link position-relative me-3 text-dark"> Giỏ Hàng 
                     <i class="bi bi-cart3 fs-4"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         0
@@ -61,7 +61,7 @@
                 
                 <div class="dropdown">
                     <a class="btn btn-outline-dark rounded-pill px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person"></i> Tài khoản
+                        <i class="bi bi-person"></i> Tài Khoản
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
                         <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
@@ -72,5 +72,6 @@
         </div>
     </div>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
