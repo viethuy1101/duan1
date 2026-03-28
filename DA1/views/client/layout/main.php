@@ -8,14 +8,13 @@
     <script src="<?= BASE_URL ?>/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>  
-<?php require PATH_VIEW . 'layout/header.php';
- ?>
+<?php require PATH_VIEW . 'client/layout/header.php'; ?>
 
 <div class="container mt-4">
     <?php include $content; ?> 
 </div>
 
-<?php require PATH_VIEW . 'layout/footer.php'; ?>
+<?php require PATH_VIEW . 'client/layout/footer.php'; ?>
 
 </body>
 </html>

@@ -1,27 +1,33 @@
 <?php
+class Product {
+    private $conn;
 
-require_once PATH_MODEL . 'BaseModel.php';
+    public function __construct() {
+        $this->conn = connectDB();
+    }
 
-class Product extends BaseModel
-{
-    protected $table = 'books';
+    public function getAll() {
+        return $this->conn->query("SELECT * FROM books")->fetchAll();
+    }
 
-    public function getAll()
-{
-    return $this->pdo->query("SELECT * FROM books")->fetchAll();
-}
-
-    public function find($id)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id=?");
+    public function getById($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM books WHERE id=?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
 
-    // public function create($data)
-    // {
-    //     $stmt = $this->pdo->prepare("INSERT INTO {$this->table} (title, author, price, description, image) VALUES (?, ?, ?, ?, ?)");
-    //     $stmt->execute([$data['title'], $data['author'], $data['price'], $data['description'], $data['image']]);
-    //     return $this->pdo->lastInsertId();
-    // }
+    public function create($data) {
+        $stmt = $this->conn->prepare("INSERT INTO products(title,price,image) VALUES(?,?,?)");
+        return $stmt->execute([$data['title'], $data['price'], $data['image']]);
+    }
+
+    public function update($id, $data) {
+        $stmt = $this->conn->prepare("UPDATE products SET title=?,price=?,image=? WHERE id=?");
+        return $stmt->execute([$data['title'], $data['price'], $data['image'], $id]);
+    }
+
+    public function delete($id) {
+        $stmt = $this->conn->prepare("DELETE FROM products WHERE id=?");
+        return $stmt->execute([$id]);
+    }
 }

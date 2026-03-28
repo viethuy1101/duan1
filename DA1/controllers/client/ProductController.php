@@ -1,4 +1,7 @@
 <?php
+namespace controllers\client;
+
+use Product;
 
 require_once PATH_MODEL . 'Product.php';
 
@@ -13,7 +16,7 @@ class ProductController
     public function detail()
     {
         $id = $_GET['id'] ?? 0;
-        $product = (new Product())->find($id);
+        $product = (new Product())->getById($id);
 
         require PATH_VIEW . 'product/detail.php';
     }

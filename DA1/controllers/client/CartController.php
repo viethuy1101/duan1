@@ -1,4 +1,7 @@
 <?php
+namespace controllers\client;
+
+use Cart;
 
 require_once PATH_MODEL . 'Cart.php';
 

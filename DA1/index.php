@@ -2,17 +2,28 @@
 
 session_start();
 
-spl_autoload_register(function ($class) {    
-    $fileName = "$class.php";
+spl_autoload_register(function ($class) {
+    $normalized = str_replace('\\', '/', $class);
 
-    $fileModel              = PATH_MODEL . $fileName;
-    $fileController         = PATH_CONTROLLER . $fileName;
+    $candidates = [
+        PATH_MODEL . $normalized . '.php',
+        PATH_CONTROLLER . $normalized . '.php',
+        PATH_ROOT . $normalized . '.php',
+    ];
 
-    if (is_readable($fileModel)) {
-        require_once $fileModel;
-    } 
-    else if (is_readable($fileController)) {
-        require_once $fileController;
+    if (str_starts_with($normalized, 'controllers/')) {
+        $candidates[] = PATH_CONTROLLER . substr($normalized, strlen('controllers/')) . '.php';
+    }
+
+    if (str_starts_with($normalized, 'models/')) {
+        $candidates[] = PATH_MODEL . substr($normalized, strlen('models/')) . '.php';
+    }
+
+    foreach ($candidates as $file) {
+        if (is_readable($file)) {
+            require_once $file;
+            return;
+        }
     }
 });
 

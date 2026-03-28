@@ -2,11 +2,9 @@
 
 $action = $_GET['action'] ?? '/';
 
-match ($action) {
-    '/'         => (new HomeController)->index(),
-    'detail' => (new ProductController())->detail(),
-    // 'create' => (new ProductController())->create(),
-    'cart' => (new CartController())->index(),
-        default => die('404'),
-
-};
+// nếu là admin
+if (str_contains($action, 'admin')) {
+    require_once 'admin.php';
+} else {
+    require_once 'client.php';
+}
