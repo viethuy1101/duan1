@@ -48,6 +48,8 @@ if (!function_exists('view')) {
         $content = ob_get_clean();
         
         $title = $data['title'] ?? '';
+        $message = $_SESSION['message'] ?? '';
+        unset($_SESSION['message']);
         require PATH_VIEW . 'layout/base.php';
     }
 }

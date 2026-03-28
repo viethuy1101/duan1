@@ -17,17 +17,17 @@ class Product {
     }
 
     public function create($data) {
-        $stmt = $this->conn->prepare("INSERT INTO products(title,price,image) VALUES(?,?,?)");
+        $stmt = $this->conn->prepare("INSERT INTO books(title,price,image) VALUES(?,?,?)");
         return $stmt->execute([$data['title'], $data['price'], $data['image']]);
     }
 
     public function update($id, $data) {
-        $stmt = $this->conn->prepare("UPDATE products SET title=?,price=?,image=? WHERE id=?");
+        $stmt = $this->conn->prepare("UPDATE books SET title=?,price=?,image=? WHERE id=?");
         return $stmt->execute([$data['title'], $data['price'], $data['image'], $id]);
     }
 
     public function delete($id) {
-        $stmt = $this->conn->prepare("DELETE FROM products WHERE id=?");
+        $stmt = $this->conn->prepare("DELETE FROM books WHERE id=?");
         return $stmt->execute([$id]);
     }
 }

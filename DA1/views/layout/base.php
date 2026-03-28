@@ -13,6 +13,12 @@ if ($type == 'client') {
 }
 ?>
 
+<?php if (!empty($message)): ?>
+<div style="margin-left:220px;padding:10px;background:lightgreen;color:green;border:1px solid green;">
+    <?= $message ?>
+</div>
+<?php endif; ?>
+
 <div style="margin-left:220px;padding:20px;">
     <?= $content ?>
 </div>

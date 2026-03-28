@@ -11,14 +11,12 @@ class CategoryController
         $model = new Category();
         $categories = $model->getAll();
 
-        $view = 'views/admin/categories/index.php';
-        require 'views/layout/admin.php';
+        view('categories/index', compact('categories'), 'admin');
     }
 
     public function create()
     {
-        $view = 'views/admin/categories/create.php';
-        require 'views/layout/admin.php';
+        view('categories/create', [], 'admin');
     }
 
     public function store()
@@ -28,7 +26,7 @@ class CategoryController
         $model->insert([
             'name' => $_POST['name']
         ]);
-
+        $_SESSION['message'] = 'Thêm danh mục thành công!';
         header('Location: ' . BASE_URL . 'admin/category');
     }
 
@@ -37,27 +35,22 @@ class CategoryController
         $model = new Category();
         $category = $model->find($_GET['id']);
 
-        $view = 'views/admin/categories/edit.php';
-        require 'views/layout/admin.php';
+        view('categories/edit', compact('category'), 'admin');
     }
 
     public function update()
     {
         $model = new Category();
-
-        $model->update($_GET['id'], [
-            'name' => $_POST['name']
-        ]);
-
+        $model->update($_POST['id'], ['name' => $_POST['name']]);
+        $_SESSION['message'] = 'Cập nhật danh mục thành công!';
         header('Location: ' . BASE_URL . 'admin/category');
     }
 
     public function delete()
     {
         $model = new Category();
-
         $model->delete($_GET['id']);
-
+        $_SESSION['message'] = 'Xóa danh mục thành công!';
         header('Location: ' . BASE_URL . 'admin/category');
     }
 }

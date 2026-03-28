@@ -21,7 +21,8 @@ class ProductController {
 
     public function store() {
         $this->model->create($_POST);
-        header("Location: ?action=admin/product");
+        echo "<script>alert('Thêm sản phẩm thành công!');window.location='?action=admin/product';</script>";
+        exit;
     }
 
     public function edit() {
@@ -31,11 +32,13 @@ class ProductController {
 
     public function update() {
         $this->model->update($_POST['id'], $_POST);
-        header("Location: ?action=admin/product");
+        echo "<script>alert('Cập nhật sản phẩm thành công!');window.location='?action=admin/product';</script>";
+        exit;
     }
 
     public function delete() {
         $this->model->delete($_GET['id']);
-        header("Location: ?action=admin/product");
+        echo "<script>alert('Xóa sản phẩm thành công!');window.location='?action=admin/product';</script>";
+        exit;
     }
 }

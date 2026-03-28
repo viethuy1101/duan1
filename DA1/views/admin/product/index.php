@@ -25,7 +25,7 @@
         <td><?= $p['price'] ?></td>
         <td>
             <a href="<?= BASE_URL ?>admin/product/edit?id=<?= $p['id'] ?>" class="btn btn-edit">Sửa</a>
-            <a href="<?= BASE_URL ?>admin/product/delete?id=<?= $p['id'] ?>" class="btn btn-delete">Xóa</a>
+            <a href="<?= BASE_URL ?>admin/product/delete?id=<?= $p['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')" class="btn btn-delete">Xóa</a>
         </td>
     </tr>
     <?php endforeach; ?>
