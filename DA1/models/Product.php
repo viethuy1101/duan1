@@ -17,9 +17,15 @@ class Product {
     }
 
     public function create($data) {
-        $stmt = $this->conn->prepare("INSERT INTO books(title,price,image) VALUES(?,?,?)");
-        return $stmt->execute([$data['title'], $data['price'], $data['image']]);
-    }
+    // Thêm cột stock vào câu lệnh INSERT
+    $stmt = $this->conn->prepare("INSERT INTO books(title, price, image, stock) VALUES(?,?,?,?)");
+    return $stmt->execute([
+        $data['title'], 
+        $data['price'], 
+        $data['image'], 
+        $data['stock'] // Lấy dữ liệu từ ô input stock
+    ]);
+}
 
     public function update($id, $data) {
         $stmt = $this->conn->prepare("UPDATE books SET title=?,price=?,image=? WHERE id=?");

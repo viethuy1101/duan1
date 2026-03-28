@@ -19,11 +19,14 @@ class ProductController {
         view('product/create', [], 'admin');
     }
 
-    public function store() {
+   public function store() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $this->model->create($_POST);
+        // Sửa lại action để quay về đúng trang danh sách sản phẩm
         echo "<script>alert('Thêm sản phẩm thành công!');window.location='?action=admin/product';</script>";
         exit;
     }
+}
 
     public function edit() {
         $product = $this->model->getById($_GET['id']);
