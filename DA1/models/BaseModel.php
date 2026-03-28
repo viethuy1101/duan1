@@ -1,5 +1,7 @@
 <?php
 
+namespace models;
+
 class BaseModel
 {
     protected $table;
@@ -11,8 +13,8 @@ class BaseModel
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8', DB_HOST, DB_PORT, DB_NAME);
 
         try {
-            $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, DB_OPTIONS);
-        } catch (PDOException $e) {
+            $this->pdo = new \PDO($dsn, DB_USERNAME, DB_PASSWORD, DB_OPTIONS);
+        } catch (\PDOException $e) {
             // Xử lý lỗi kết nối
             die("Kết nối cơ sở dữ liệu thất bại: {$e->getMessage()}. Vui lòng thử lại sau.");
         }
@@ -22,5 +24,44 @@ class BaseModel
     public function __destruct()
     {
         $this->pdo = null;
+    }
+
+    // Lấy tất cả bản ghi
+    public function getAll()
+    {
+        $stmt = $this->pdo->query("SELECT * FROM {$this->table}");
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // Tìm bản ghi theo ID
+    public function find($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    // Thêm bản ghi mới
+    public function insert($data)
+    {
+        $columns = implode(', ', array_keys($data));
+        $placeholders = str_repeat('?, ', count($data) - 1) . '?';
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})");
+        return $stmt->execute(array_values($data));
+    }
+
+    // Cập nhật bản ghi
+    public function update($id, $data)
+    {
+        $set = implode(' = ?, ', array_keys($data)) . ' = ?';
+        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET {$set} WHERE id = ?");
+        return $stmt->execute(array_merge(array_values($data), [$id]));
+    }
+
+    // Xóa bản ghi
+    public function delete($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 }
