@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Danh sách sản phẩm</h1>
+
+<a href="<?= BASE_URL ?>admin/product/create" class="btn btn-add">+ Thêm</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Tên</th>
+        <th>Giá</th>
+        <th>Action</th>
+    </tr>
+
+    <?php foreach ($products as $p): ?>
+    <tr>
+        <td><?= $p['id'] ?></td>
+        <td><?= $p['title'] ?></td>
+        <td><?= $p['price'] ?></td>
+        <td>
+            <a href="<?= BASE_URL ?>admin/product/edit?id=<?= $p['id'] ?>" class="btn btn-edit">Sửa</a>
+            <a href="<?= BASE_URL ?>admin/product/delete?id=<?= $p['id'] ?>" class="btn btn-delete">Xóa</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</body>
+</html>
