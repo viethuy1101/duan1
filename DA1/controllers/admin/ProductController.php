@@ -22,10 +22,9 @@ class ProductController {
    public function store() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $this->model->create($_POST);
-        // Sửa lại action để quay về đúng trang danh sách sản phẩm
-        echo "<script>alert('Thêm sản phẩm thành công!');window.location='?action=admin/product';</script>";
-        exit;
-    }
+        header("Location: ?action=admin/product");
+         exit;
+    }   
 }
 
     public function edit() {
@@ -35,13 +34,13 @@ class ProductController {
 
     public function update() {
         $this->model->update($_POST['id'], $_POST);
-        echo "<script>alert('Cập nhật sản phẩm thành công!');window.location='?action=admin/product';</script>";
+        header("Location: ?action=admin/product");
         exit;
     }
 
     public function delete() {
         $this->model->delete($_GET['id']);
-        echo "<script>alert('Xóa sản phẩm thành công!');window.location='?action=admin/product';</script>";
+        header("Location: ?action=admin/product");
         exit;
     }
 }

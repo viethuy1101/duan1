@@ -25,8 +25,19 @@
         <td><?= $p['price'] ?></td>
         <td>
             <a href="<?= BASE_URL ?>admin/product/edit?id=<?= $p['id'] ?>" class="btn btn-edit">Sửa</a>
-            <a href="<?= BASE_URL ?>admin/product/delete?id=<?= $p['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')" class="btn btn-delete">Xóa</a>
-        </td>
+<?php foreach ($products as $product): ?>
+<tr>
+    <td><?= $product['id'] ?></td>
+    <td><?= $product['title'] ?></td>
+    <td>
+        <a href="?action=admin/product/edit&id=<?= $product['id'] ?>" class="btn btn-warning">Sửa</a>
+
+        <a href="?action=admin/product/delete&id=<?= $product['id'] ?>" 
+           class="btn btn-danger" 
+           onclick="return confirm('M có chắc chắn muốn xóa không?')">Xóa</a>
+    </td>
+</tr>
+<?php endforeach; ?>        </td>
     </tr>
     <?php endforeach; ?>
 </table>
