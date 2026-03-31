@@ -28,9 +28,25 @@ class Product {
 }
 
     public function update($id, $data) {
-        $stmt = $this->conn->prepare("UPDATE books SET title=?,price=?,image=? WHERE id=?");
-        return $stmt->execute([$data['title'], $data['price'], $data['image'], $id]);
-    }
+    $sql = "UPDATE books SET 
+                title = ?, 
+                price = ?, 
+                image = ?, 
+                stock = ?, 
+                description = ?, 
+                author = ? 
+            WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([
+        $data['title'], 
+        $data['price'], 
+        $data['image'], 
+        $data['stock'],
+        $data['description'] ?? null,
+        $data['author'] ?? null,
+        $id
+    ]);
+}
 
     public function delete($id) {
         $stmt = $this->conn->prepare("DELETE FROM books WHERE id=?");
