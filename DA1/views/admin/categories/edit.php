@@ -1,14 +1,31 @@
-<h1>Sửa Sản Phẩm</h1>
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-white py-3 border-0">
+            <h5 class="mb-0 fw-bold text-primary">
+                <i class="bi bi-pencil-fill me-2"></i>Cập nhật danh mục
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <form action="?action=admin/category/update&id=<?= $category['id'] ?>" method="POST">
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-muted text-uppercase">Tên danh mục</label>
+                    <input type="text" name="name" class="form-control form-control-lg border-2" 
+                           value="<?= $category['name'] ?>" required>
+                </div>
 
-<form method="POST" action="?action=admin/product/update">
-    <input type="hidden" name="id" value="<?= $product['id'] ?? '' ?>">
-
-    <p>Tên sách: <input type="text" name="title" value="<?= $product['title'] ?? '' ?>"></p>
-    <p>Tác giả: <input type="text" name="author" value="<?= $product['author'] ?? '' ?>"></p>
-    <p>Giá: <input type="number" name="price" value="<?= $product['price'] ?? '' ?>"></p>
-    <p>Ảnh: <input type="text" name="image" value="<?= $product['image'] ?? '' ?>"></p>
-    <p>Kho: <input type="number" name="stock" value="<?= $product['stock'] ?? 0 ?>"></p>
-    <p>Mô tả: <textarea name="description"><?= $product['description'] ?? '' ?></textarea></p>
-
-    <button type="submit">Cập nhật</button>
-</form>
+                <div class="row g-2 mt-4">
+                    <div class="col-8">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">
+                            Xác nhận thay đổi
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <a href="?action=admin/category" class="btn btn-light border w-100 py-2 text-muted">
+                            Hủy
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
