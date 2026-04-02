@@ -12,9 +12,16 @@ use controllers\admin\CategoryController;
 
 $action = isset($_GET['action']) ? trim($_GET['action']) : 'admin';
 
+// XÓA BỎ DÒNG $router->get(...) Ở ĐÂY - ĐÂY LÀ NGUYÊN NHÂN GÂY LỖI
+
 match ($action) {
     'admin', 'admin/dashboard' => (new DashboardController())->index(),
-    'admin/order'             => (new OrderController())->index(),
+    'admin/order'              => (new OrderController())->index(),
+    'admin/order/detail'       => (new OrderController())->detail(),
+    
+    // Đừng quên thêm route cho hàm export nếu m muốn dùng
+    'admin/order/export'       => (new OrderController())->export(),
+
     // CRUD Product
     'admin/product'         => (new ProductController())->index(),
     'admin/product/create'  => (new ProductController())->create(),
@@ -33,4 +40,3 @@ match ($action) {
 
     default => die("404 ADMIN: Không tìm thấy hành động $action"),
 };
-?>

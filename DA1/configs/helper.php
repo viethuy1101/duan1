@@ -1,10 +1,16 @@
 <?php
 
+// Định nghĩa lại hằng số PATH_VIEW chuẩn nhất nếu nó chưa có
+if (!defined('PATH_VIEW')) {
+    define('PATH_VIEW', __DIR__ . '/../views/');
+}
+
 if (!function_exists('debug')) {
     function debug($data)
     {
         echo '<pre>';
         print_r($data);
+        echo '</pre>'; // Thêm đóng thẻ pre cho dễ nhìn
         die;
     }
 }
@@ -13,7 +19,7 @@ if (!function_exists('upload_file')) {
     function upload_file($folder, $file)
     {
         $targetFile = $folder . '/' . time() . '-' . $file["name"];
-
+        // Chú ý: Đảm bảo PATH_ASSETS_UPLOADS đã được định nghĩa
         if (move_uploaded_file($file["tmp_name"], PATH_ASSETS_UPLOADS . $targetFile)) {
             return $targetFile;
         }
@@ -37,19 +43,35 @@ if (!function_exists('connectDB')) {
         }
     }
 }
-
 if (!function_exists('view')) {
     function view($viewName, $data = [], $type = 'client')
     {
         extract($data);
         
-        ob_start();
-        require PATH_VIEW . $type . '/' . $viewName . '.php';
-        $content = ob_get_clean();
-        
-        $title = $data['title'] ?? '';
-        $message = $_SESSION['message'] ?? '';
-        unset($_SESSION['message']);
-        require PATH_VIEW . 'layout/base.php';
+        // Đường dẫn file nội dung chính
+        $viewPath = PATH_VIEW . $type . '/' . $viewName . '.php';
+
+        if ($type === 'admin') {
+            // Chỉ trang Admin mới tự động nạp Header và Sidebar chuẩn
+            $headerPath  = PATH_VIEW . 'admin/layout/header.php';
+            $sidebarPath = PATH_VIEW . 'admin/layout/sidebar.php';
+            $footerPath  = PATH_VIEW . 'admin/layout/footer.php';
+
+            if (file_exists($headerPath))  require_once $headerPath;
+            if (file_exists($sidebarPath)) require_once $sidebarPath;
+            
+            if (file_exists($viewPath)) {
+                require_once $viewPath;
+            } else {
+                die("Lỗi: Không tìm thấy view tại $viewPath");
+            }
+
+            if (file_exists($footerPath))  require_once $footerPath;
+        } else {
+            // Trang Client (Người dùng) thường có layout riêng, không dùng chung Sidebar Admin
+            if (file_exists($viewPath)) {
+                require_once $viewPath;
+            }
+        }
     }
 }
