@@ -54,3 +54,4 @@ class CategoryController
         header('Location: ' . BASE_URL . 'admin/category');
     }
 }
+?>

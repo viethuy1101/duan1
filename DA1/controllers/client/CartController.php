@@ -13,3 +13,4 @@ class CartController
         require PATH_VIEW . 'cart/index.php';
     }
 }
+?>

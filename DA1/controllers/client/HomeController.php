@@ -14,3 +14,4 @@ class HomeController
         require PATH_VIEW . 'client/layout/main.php';
     }
 }
+?>

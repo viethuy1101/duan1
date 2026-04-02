@@ -13,3 +13,4 @@ class Cart extends BaseModel
         return $this->pdo->query($sql)->fetchAll();
     }
 }
+?>

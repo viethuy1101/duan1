@@ -3,17 +3,18 @@
 require_once PATH_CONTROLLER . 'admin/DashboardController.php';
 require_once PATH_CONTROLLER . 'admin/ProductController.php';
 require_once PATH_CONTROLLER . 'admin/CategoryController.php';
+require_once PATH_CONTROLLER . 'admin/OrderController.php';
 
+use controllers\admin\OrderController;
 use controllers\admin\DashboardController;
 use controllers\admin\ProductController;
 use controllers\admin\CategoryController;
 
-// Xóa khoảng trắng thừa từ URL để tránh lỗi 403
 $action = isset($_GET['action']) ? trim($_GET['action']) : 'admin';
 
 match ($action) {
     'admin', 'admin/dashboard' => (new DashboardController())->index(),
-    
+    'admin/order'             => (new OrderController())->index(),
     // CRUD Product
     'admin/product'         => (new ProductController())->index(),
     'admin/product/create'  => (new ProductController())->create(),
@@ -32,3 +33,4 @@ match ($action) {
 
     default => die("404 ADMIN: Không tìm thấy hành động $action"),
 };
+?>

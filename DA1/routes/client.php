@@ -11,3 +11,4 @@ match ($action) {
 
     default => die('404 CLIENT'),
 };
+?>

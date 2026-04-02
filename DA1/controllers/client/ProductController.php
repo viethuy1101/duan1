@@ -110,3 +110,4 @@ class ProductController
         imagedestroy($resized);
     }
 }
+?>

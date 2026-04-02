@@ -6,3 +6,4 @@ class DashboardController {
         view('dashboard', ['title' => 'Dashboard'], 'admin');
     }
 }
+?>
