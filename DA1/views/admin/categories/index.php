@@ -1,4 +1,12 @@
-<div class="container-fluid py-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-dark mb-0">Danh Mục Sách</h3>
         <a href="?action=admin/category/create" class="btn btn-success px-4 shadow-sm">
@@ -42,3 +50,5 @@
         </div>
     </div>
 </div>
+</body>
+</html>

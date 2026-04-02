@@ -8,3 +8,4 @@ if (str_contains($action, 'admin')) {
 } else {
     require_once 'client.php';
 }
+?>

@@ -1,4 +1,12 @@
-<div class="container-fluid mt-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid mt-4">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
         <div class="card-header bg-white py-3 border-0">
             <h5 class="mb-0 fw-bold text-primary">
@@ -47,3 +55,5 @@
         </div>
     </div>
 </div>
+</body>
+</html>

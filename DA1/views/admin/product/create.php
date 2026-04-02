@@ -1,4 +1,12 @@
-<div class="container-fluid">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="?action=admin/product">Sản phẩm</a></li>
@@ -60,3 +68,5 @@
         </div>
     </div>
 </div>
+</body>
+</html>
