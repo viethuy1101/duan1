@@ -14,8 +14,10 @@
             </h5>
         </div>
         <div class="card-body p-4">
-            <form action="?action=admin/product/update&id=<?= $product['id'] ?>" method="POST" enctype="multipart/form-data">
-                <div class="row g-3">
+            <<form action="?action=admin/product/update" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?= $product['id'] ?>">
+    
+    <div class="row g-3">
                     <div class="col-md-8">
                         <label class="form-label fw-bold small text-muted text-uppercase">Tên sách</label>
                         <input type="text" name="title" class="form-control form-control-lg" value="<?= $product['title'] ?>" required>
@@ -32,9 +34,9 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-bold small text-muted text-uppercase">Số lượng kho</label>
-                        <input type="number" name="stock" class="form-control" value="<?= $product['stock'] ?>">
-                    </div>
+    <label class="form-label fw-bold small text-muted text-uppercase">Số lượng kho</label>
+    <input type="number" name="stock" class="form-control" value="<?= $product['stock'] ?? 0 ?>">
+</div>
 
                     <div class="col-12">
                         <label class="form-label fw-bold small text-muted text-uppercase">Đường dẫn ảnh</label>
