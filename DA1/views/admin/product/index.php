@@ -41,8 +41,7 @@
                                 </td>
                                 <td><span class="badge bg-danger-subtle text-danger px-3 py-2 fw-bold"><?= number_format($p['price']) ?>đ</span></td>
                                 <td>
-                                    <span class="badge bg-info-subtle text-info px-3 py-2 fw-bold"><?= $p['stock'] ?> cuốn</span>
-                                </td>
+<span class="badge bg-info text-dark"><?= $p['stock'] ?> cuốn</span>                                </td>
                                 <td class="pe-4 text-end">
                                     <a href="?action=admin/product/edit&id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-warning border-0 mx-1">
                                         <i class="bi bi-pencil-fill"></i>

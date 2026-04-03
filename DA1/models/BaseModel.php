@@ -55,12 +55,19 @@ class BaseModel
     }
 
     // Cập nhật bản ghi
-    public function update($id, $data)
-    {
-        $set = implode(' = ?, ', array_keys($data)) . ' = ?';
-        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET {$set} WHERE id = ?");
-        return $stmt->execute(array_merge(array_values($data), [$id]));
+    public function update($id, $data) {
+    $set = "";
+    foreach ($data as $key => $value) {
+        $set .= "$key = :$key, ";
     }
+    $set = rtrim($set, ", ");
+    
+    $sql = "UPDATE {$this->table} SET {$set} WHERE id = :id";
+    $data['id'] = $id;
+
+    $stmt = $this->pdo->prepare($sql);
+    return $stmt->execute($data);
+}
 
     // Xóa bản ghi
     public function delete($id)
