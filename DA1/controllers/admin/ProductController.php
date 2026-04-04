@@ -19,12 +19,26 @@ class ProductController {
         view('product/create', [], 'admin');
     }
 
-   public function store() {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $this->model->create($_POST);
+// Trong ProductController.php hàm store()
+public function store() {
+    $data = $_POST; // Lấy dữ liệu từ form
+    
+    // Xử lý upload ảnh như t đã chỉ ở bước trước
+    if (isset($_FILES['image_upload']) && $_FILES['image_upload']['size'] > 0) {
+        $filename = time() . '_' . $_FILES['image_upload']['name'];
+        move_uploaded_file($_FILES['image_upload']['tmp_name'], 'assets/uploads/img/' . $filename);
+        $data['image'] = $filename;
+    } else {
+        $data['image'] = null;
+    }
+
+    // Gọi hàm insert vừa tạo ở Bước 1
+    $res = $this->model->insert($data);
+
+    if ($res) {
         header("Location: ?action=admin/product");
-         exit;
-    }   
+        exit(); // Chặn lỗi đơ trang
+    }
 }
 
     public function edit() {
@@ -32,33 +46,29 @@ class ProductController {
         view('product/edit', compact('product'), 'admin');
     }
 
- public function update() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public function update($id) {
+    $data = $_POST;
+    $file = $_FILES['image_upload'];
 
-        $id = $_POST['id'] ?? null; 
+    if ($file['size'] > 0) {
+        // Nếu có chọn ảnh mới
+        $filename = $file['name']; 
+        // Lưu vào thư mục m đang có
+        move_uploaded_file($file['tmp_name'], 'assets/uploads/img/' . $filename);
+        $data['image'] = $filename; 
+    } else {
+        // Nếu không chọn ảnh mới, dùng lại cái current_image từ form
+        $data['image'] = $_POST['current_image'];
+    }
 
-        if ($id) {
-            $data = [
-                'title'       => $_POST['title'],
-                'price'       => $_POST['price'],
-                'author'      => $_POST['author'],
-                'stock'       => $_POST['stock'], 
-                'image'       => $_POST['image'],    
-                'description' => $_POST['description'],
-            ];
+    // Gọi model để lưu vào bảng 'books'
+    $res = $this->model->update($id, $data); 
 
-            $result = $this->model->update($id, $data);
-
-            if ($result) {
-                header("Location: ?action=admin/product");
-                exit();
-            }
-        } else {
-            die("Không tìm thấy ID sản phẩm để update m ơi!");
-        }
+    if ($res) {
+        header("Location: ?action=admin/product");
+        exit();
     }
 }
-
     public function delete() {
         $this->model->delete($_GET['id']);
         header("Location: ?action=admin/product");

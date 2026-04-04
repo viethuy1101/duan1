@@ -16,41 +16,48 @@ class Product {
         return $stmt->fetch();
     }
 
-    public function create($data) {
-    // Thêm cột stock vào câu lệnh INSERT
-    $stmt = $this->conn->prepare("INSERT INTO books(title, price, image, stock) VALUES(?,?,?,?)");
-    return $stmt->execute([
-        $data['title'], 
-        $data['price'], 
-        $data['image'], 
-        $data['stock'] // Lấy dữ liệu từ ô input stock
-    ]);
-}
+    // Hàm này để lưu sản phẩm mới
+    public function insert($data) {
+        $sql = "INSERT INTO books (title, author, price, description, image, stock, category_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($sql);
+        
+        return $stmt->execute([
+            $data['title'] ?? null,
+            $data['author'] ?? null,
+            $data['price'] ?? 0,
+            $data['description'] ?? null,
+            $data['image'] ?? null,
+            $data['stock'] ?? 0,
+            $data['category_id'] ?? null
+        ]);
+    }
 
     public function update($id, $data) {
-    $sql = "UPDATE books SET 
-                title = ?, 
-                price = ?, 
-                image = ?, 
-                stock = ?, 
-                description = ?, 
-                author = ? 
-            WHERE id = ?";
-    $stmt = $this->conn->prepare($sql);
-    return $stmt->execute([
-        $data['title'], 
-        $data['price'], 
-        $data['image'], 
-        $data['stock'],
-        $data['description'] ?? null,
-        $data['author'] ?? null,
-        $id
-    ]);
-}
+        $sql = "UPDATE books SET 
+                    title = ?, 
+                    price = ?, 
+                    image = ?, 
+                    stock = ?, 
+                    description = ?, 
+                    author = ? 
+                WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            $data['title'], 
+            $data['price'], 
+            $data['image'], 
+            $data['stock'],
+            $data['description'] ?? null,
+            $data['author'] ?? null,
+            $id
+        ]);
+    }
 
     public function delete($id) {
         $stmt = $this->conn->prepare("DELETE FROM books WHERE id=?");
         return $stmt->execute([$id]);
     }
-}
+} 
 ?>
