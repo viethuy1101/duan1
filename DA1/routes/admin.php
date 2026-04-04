@@ -26,10 +26,10 @@ match ($action) {
     'admin/product'         => (new ProductController())->index(),
     'admin/product/create'  => (new ProductController())->create(),
     'admin/product/store'   => (new ProductController())->store(),
-    'admin/product/edit'    => (new ProductController())->edit(),
-    'admin/product/update'  => (new ProductController())->update(),
-    'admin/product/delete'  => (new ProductController())->delete(),
-
+    'admin/product/edit'    => (new ProductController())->edit($_GET['id'] ?? null),
+    'admin/product/update'  => (new ProductController())->update($_GET['id'] ?? $_POST['id'] ?? null),
+    'admin/product/delete'  => (new ProductController())->delete($_GET['id'] ?? null),
+    
     // CRUD Category
     'admin/category'        => (new CategoryController())->index(),
     'admin/category/create' => (new CategoryController())->create(),

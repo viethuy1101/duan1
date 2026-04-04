@@ -43,14 +43,16 @@
                         <label class="form-label fw-bold">Số lượng tồn kho</label>
                         <input type="number" name="stock" class="form-control" value="0">
                     </div>
+                    
+                    <form action="?action=admin/product/store" method="POST" enctype="multipart/form-data">
+    
+    <div class="mb-3">
+        <label class="form-label fw-bold">ĐƯỜNG DẪN ẢNH</label>
+        <input type="file" name="image_upload" class="form-control">
+    </div>
 
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Đường dẫn ảnh</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="bi bi-image"></i></span>
-                            <input type="text" name="image" class="form-control" placeholder="assets/images/book1.jpg">
-                        </div>
-                    </div>
+</form>
+                    
 
                     <div class="col-12">
                         <label class="form-label fw-bold">Mô tả chi tiết</label>
