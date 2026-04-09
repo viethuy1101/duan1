@@ -14,7 +14,7 @@
             </h5>
         </div>
         <div class="card-body p-4">
-            <form action="?action=admin/category/update&id=<?= $category['id'] ?>" method="POST">
+           <form action="?action=admin/category/update&id=<?= $category['id'] ?>" method="POST">
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-muted text-uppercase">Tên danh mục</label>
                     <input type="text" name="name" class="form-control form-control-lg border-2" 

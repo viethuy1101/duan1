@@ -15,13 +15,14 @@ class Order extends BaseModel {
 
     // Lấy chi tiết các sách trong đơn hàng đó
     public function getOrderDetails($id) {
-        $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
-                FROM order_details od
-                JOIN books b ON od.book_id = b.id 
-                WHERE od.order_id = ?";
-        
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
+    // JOIN bảng books dựa trên book_id
+    $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
+            FROM order_details od
+            JOIN books b ON od.book_id = b.id 
+            WHERE od.order_id = ?";
+    
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
 }

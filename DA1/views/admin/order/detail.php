@@ -21,12 +21,21 @@
                 <tbody>
     <?php foreach ($order_details as $item): ?>
     <tr>
-        <td class="ps-4">
-            <div class="d-flex align-items-center py-2">
-                <img src="<?= $item['product_image'] ?>" width="50" class="rounded me-3 shadow-sm">
-                <span class="fw-medium"><?= $item['product_name'] ?></span>
-            </div>
-        </td>
+       <td class="ps-4">
+    <div class="d-flex align-items-center py-2">
+        <img src="assets/uploads/img/<?= trim($item['product_image']) ?>" 
+     width="60" 
+     height="80" 
+     style="object-fit: cover;" 
+     class="rounded me-3 shadow-sm"
+     onerror="this.src='https://ui-avatars.com/api/?name=Book&color=7F9CF5&background=EBF4FF'">
+             
+        <div>
+            <div class="fw-bold"><?= $item['product_name'] ?></div>
+            <small class="text-muted">Mã sách: #<?= $item['book_id'] ?></small>
+        </div>
+    </div>
+</td>
         <td><?= number_format($item['price']) ?>đ</td>
         
         <td class="text-center">x<?= $item['quantity'] ?></td>

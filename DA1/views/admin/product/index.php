@@ -37,9 +37,19 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="rounded-3 shadow-sm border overflow-hidden me-3" style="width: 50px; height: 70px;">
-                                            <img src="assets/uploads/img/<?= $p['image'] ?>" 
-     onerror="this.src='https://via.placeholder.com/50x70?text=No+Image'"
-     class="w-100 h-100" style="object-fit: cover;">
+                                             <div class="rounded-3 shadow-sm border overflow-hidden me-3" style="width: 50px; height: 70px;">
+    <?php 
+        // Đảm bảo lấy đúng đường dẫn từ gốc thư mục DA1
+        $imgName = !empty($p['image']) ? trim($p['image']) : 'no-image-book.png';
+        $imagePath = "assets/uploads/img/" . $imgName;
+    ?>
+    <img src="<?= $imagePath ?>" 
+         alt="<?= htmlspecialchars($p['title']) ?>"
+         class="w-100 h-100" 
+         style="object-fit: cover; display: block;" 
+         onerror="this.onerror=null; this.src='assets/uploads/img/no-image-book.png';">
+</div>
+</div>
                                         </div>
                                         <div>
                                             <div class="fw-bold text-dark mb-0"><?= $p['title'] ?></div>
