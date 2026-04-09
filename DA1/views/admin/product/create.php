@@ -51,9 +51,6 @@
         <input type="file" name="image_upload" class="form-control">
     </div>
 
-</form>
-                    
-
                     <div class="col-12">
                         <label class="form-label fw-bold">Mô tả chi tiết</label>
                         <textarea name="description" class="form-control" rows="4" placeholder="Nhập nội dung tóm tắt sách..."></textarea>

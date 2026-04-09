@@ -28,6 +28,7 @@ class CategoryController
         ]);
         $_SESSION['message'] = 'Thêm danh mục thành công!';
         header('Location: ' . BASE_URL . 'admin/category');
+        exit();
     }
 
     public function edit()
@@ -41,9 +42,17 @@ class CategoryController
     public function update()
     {
         $model = new Category();
-        $model->update($_POST['id'], ['name' => $_POST['name']]);
-        $_SESSION['message'] = 'Cập nhật danh mục thành công!';
+        
+        // Sửa lỗi ID lấy từ URL
+        $id = $_GET['id'] ?? null;
+        
+        if ($id) {
+            $model->update($id, ['name' => $_POST['name']]);
+            $_SESSION['message'] = 'Cập nhật danh mục thành công!';
+        }
+        
         header('Location: ' . BASE_URL . 'admin/category');
+        exit();
     }
 
     public function delete()
@@ -52,6 +61,6 @@ class CategoryController
         $model->delete($_GET['id']);
         $_SESSION['message'] = 'Xóa danh mục thành công!';
         header('Location: ' . BASE_URL . 'admin/category');
+        exit();
     }
-}
-?>
+} // Kết thúc class ở đây
