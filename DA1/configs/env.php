@@ -1,6 +1,6 @@
 <?php
 // 1. URL cơ bản
-define('BASE_URL', 'http://localhost/duan1-master/DA1/');
+define('BASE_URL', 'http://localhost/da1hl/DA1/');
 
 // 2. Đường dẫn thư mục gốc - Dùng __DIR__ và lùi ra 1 cấp để ra khỏi thư mục configs
 define('PATH_ROOT', __DIR__ . '/../');

@@ -13,7 +13,7 @@
             <p class="text-muted mb-0">Hệ thống đang vận hành với hiệu suất tối ưu.</p>
         </div>
         <div class="text-end">
-            <div class="fw-bold fs-5"><?= date('H:i') ?></div>
+            <div class="fw-bold fs-5"><?= date('H:i A') ?></div>
             <div class="text-muted small"><?= date('l, d/m/Y') ?></div>
         </div>
     </div>

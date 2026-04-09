@@ -17,8 +17,10 @@ class ProductController
     {
         $id = $_GET['id'] ?? 0;
         $product = (new Product())->getById($id);
+        
 
-        require PATH_VIEW . 'product/detail.php';
+        require_once PATH_VIEW . 'client/product/detail.php';
+        
     }
 
     // public function create()

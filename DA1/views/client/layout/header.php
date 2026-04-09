@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold text-primary fs-3" href="index.php">
+        <a class="navbar-brand fw-bold text-primary fs-3" href="<?= BASE_URL ?>">
             Book<span class="text-warning">Verse</span>
         </a>
 
@@ -20,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="index.php">Trang chủ</a>
+                    <a class="nav-link active" href="<?= BASE_URL ?>">Trang chủ</a>
                 </li>
                 <li class="nav-item">
                   <!-- <a class="nav-link active" href="<?= BASE_URL ?>?action=create">Thêm sách</a> -->
@@ -52,10 +54,15 @@
             </form>
 
             <div class="d-flex align-items-center ms-auto">
-                <a href="cart.php" class="nav-link position-relative me-3 text-dark"> Giỏ Hàng 
+                <a href="<?= BASE_URL ?>?action=cart" class="nav-link position-relative me-3 text-dark"> Giỏ Hàng 
                     <i class="bi bi-cart3 fs-4"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        0
+                        <?php 
+                            if (!isset($_SESSION['cart'])) {
+                                $_SESSION['cart'] = [];
+                            }
+                            echo count($_SESSION['cart']);
+                        ?>
                     </span>
                 </a>
                 
