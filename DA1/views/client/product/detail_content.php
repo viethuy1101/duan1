@@ -268,7 +268,7 @@ body {
             <i class="fas fa-star filled"></i>
             <i class="fas fa-star half"></i>
           </div>
-          <span class="rating-count">(256 đánh giá)</span>
+          <span class="rating-count">chưa có đánh giá</span>
         </div>
 
         <div class="product-meta">
@@ -308,7 +308,7 @@ body {
               Thêm vào giỏ hàng
             </button>
 
-            <button type="button" class="btn btn-buy-now" onclick="buyNow(<?= $product['id'] ?>, <?= $product['price'] ?>)">
+            <button type="submit" class="btn btn-buy-now">
               <i class="fas fa-bolt"></i>
               Mua ngay
             </button>
@@ -347,10 +347,6 @@ body {
       }
     }
 
-    function buyNow(productId, price) {
-      // Implement buy now functionality
-      alert('Chức năng mua ngay sẽ được triển khai');
-    }
   </script>
 </body>
 </html>

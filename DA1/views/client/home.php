@@ -8,7 +8,7 @@
 </head>
 <body>
 <a href="?action=admin">Vào Admin</a>
-<img src="<?= BASE_ASSETS_UPLOADS . 'img/banner.jpg' ?>" alt="Banner">
+<img src="<?= rtrim(BASE_ASSETS_UPLOADS, '/') . '/img/banner.jpg' ?>" alt="Banner">
 <h3 class="mb-4 fw-bold">Chào mừng bạn đến với BookVerse!</h3>
 
 <div class="row">
@@ -17,7 +17,9 @@
     
     <div class="card mb-4">
       
-      <img src="<?= BASE_ASSETS_UPLOADS . $item['image'] ?>" class="card-img-top">
+<img src="<?= BASE_URL . 'assets/uploads/img/' . basename($item['image']) ?>"
+     class="card-img-top" height="300px" width="200px"
+     alt="<?= htmlspecialchars($item['title']) ?>">
 
       <div class="card-body text-center">
         
@@ -30,6 +32,7 @@
            Xem chi tiết
         </a>
       
+
 
       </div>
       
@@ -47,12 +50,15 @@
         <div class="col-6 col-md-3">
             <div class="card h-100 border-0 shadow-sm product-card">
                 <div class="p-3">
-                    <img src="<?= BASE_ASSETS_UPLOADS ?>img/product1.jpg" class="card-img-top rounded-3" alt="Clean Code" style="height: 200px; object-fit: cover;">
+                    <img src="<?= rtrim(BASE_ASSETS_UPLOADS, '/') . '/img/product1.jpg' ?>" 
+                         class="card-img-top rounded-3"
+                         alt="Clean Code"
+                         style="height: 200px; object-fit: cover;">
                 </div>
                 <div class="card-body text-center pt-0">
                     <h6 class="fw-bold mb-1">Clean Code</h6>
                     <p class="text-primary fw-bold mb-3">250,000 đ</p>
-                    <a href="#" class="btn btn-sm btn-outline-primary w-100 rounded-pill">Xem chi tiết</a>
+                    <a href="<?= BASE_URL ?>?action=detail&id=<?= $item['id'] ?>" class="btn btn-sm btn-outline-primary w-100 rounded-pill">Xem chi tiết</a>
                 </div>
             </div>
         </div>
@@ -70,7 +76,10 @@
             <div class="col-6 col-md-3">
                 <div class="card h-100 border-0 shadow-sm featured-item">
                     <div class="position-relative">
-                        <img src="img/product1.jpg" class="card-img p-2 rounded-4" alt="Sách" style="height: 250px; object-fit: contain;">
+                        <img src="<?= rtrim(BASE_ASSETS_UPLOADS, '/') . '/img/product1.jpg' ?>" 
+                             class="card-img p-2 rounded-4"
+                             alt="Sách"
+                             style="height: 250px; object-fit: contain;">
                         <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Nổi bật</span>
                     </div>
                     <div class="card-body text-center">
