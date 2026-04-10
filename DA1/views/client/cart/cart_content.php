@@ -257,9 +257,9 @@ body {
                     $total += $sum;
                 ?>
                 <tr class="cart-item">
-                  <td class="cart-image">
-                    <img src="<?= BASE_ASSETS_UPLOADS . $item['image'] ?>" alt="<?= $item['name'] ?>">
-                  </td>
+                 <td class="cart-image">
+   <img src="<?= BASE_ASSETS_UPLOADS . 'img/' . $item['image'] ?>" alt="<?= $item['name'] ?>" style="width: 80px; height: auto;">
+</td>
                   <td class="cart-name">
                     <a href="<?= BASE_URL ?>?action=detail&id=<?= $id ?>" class="product-link">
                       <?= $item['name'] ?>

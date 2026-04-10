@@ -22,47 +22,6 @@ class ProductController
         require_once PATH_VIEW . 'client/product/detail.php';
         
     }
-
-    // public function create()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         // Xử lý upload ảnh
-    //         $image = '';
-    //         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    //             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    //             $fileType = $_FILES['image']['type'];
-    //             if (in_array($fileType, $allowedTypes)) {
-    //                 $uploadDir = PATH_ROOT . 'assets/uploads/img/';
-    //                 if (!is_dir($uploadDir)) {
-    //                     mkdir($uploadDir, 0755, true);
-    //                 }
-    //                 $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
-    //                 $uploadFile = $uploadDir . $fileName;
-
-    //                 if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-    //                     // Resize ảnh về 300x300
-    //                     $this->resizeImage($uploadFile, 300, 300);
-    //                     $image = 'img/' . $fileName; // Lưu đường dẫn tương đối
-    //                 }
-    //             }
-    //         }
-
-    //         $data = [
-    //             'title' => $_POST['title'] ?? '',
-    //             'author' => $_POST['author'] ?? '',
-    //             'price' => $_POST['price'] ?? 0,
-    //             'description' => $_POST['description'] ?? '',
-    //             'image' => $image
-    //         ];
-
-    //         (new Product())->create($data);
-    //         header('Location: ' . BASE_URL);
-    //         exit;
-    //     }
-
-    //     require PATH_VIEW . 'product/create.php';
-    // }
-
     private function resizeImage($file, $width, $height)
     {
         $imageInfo = getimagesize($file);

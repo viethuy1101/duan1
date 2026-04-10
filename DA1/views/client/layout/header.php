@@ -32,11 +32,11 @@
                         Danh mục sách
                     </a>
                     <ul class="dropdown-menu border-0 shadow">
-                        <li><a class="dropdown-item" href="#">Sách Kỹ năng</a></li>
-                        <li><a class="dropdown-item" href="#">Truyện tranh</a></li>
-                        <li><a class="dropdown-item" href="#">Kinh tế - Khởi nghiệp</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=category&id=1">Sách Kỹ năng</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=category&id=2">Truyện tranh</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=category&id=3">Kinh tế - Khởi nghiệp</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Tất cả sản phẩm</a></li>
+                        <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=category&id=all">Tất cả sản phẩm</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
