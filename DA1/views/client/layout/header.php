@@ -66,15 +66,33 @@
                     </span>
                 </a>
                 
-                <div class="dropdown">
-                    <a class="btn btn-outline-dark rounded-pill px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person"></i> Tài Khoản
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
-                        <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-                        <li><a class="dropdown-item" href="#">Đăng ký</a></li>
-                    </ul>
-                </div>
+               <div class="dropdown">
+    <?php if (isset($_SESSION['user'])): ?>
+        <a class="btn btn-outline-dark rounded-pill px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-check"></i> Chào, <?= $_SESSION['user']['name'] ?>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=profile">Trang cá nhân</a></li>
+            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                <li><a class="dropdown-item text-primary" href="<?= BASE_URL ?>/admin">Vào trang quản trị</a></li>
+            <?php endif; ?>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+    <a class="dropdown-item text-danger" href="<?= BASE_URL ?>?action=logout">
+        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+    </a>
+</li>
+        </ul>
+    <?php else: ?>
+        <a class="btn btn-outline-dark rounded-pill px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person"></i> Tài Khoản
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=login">Đăng nhập</a></li>
+            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=register">Đăng ký</a></li>
+        </ul>
+    <?php endif; ?>
+</div>
             </div>
         </div>
     </div>
