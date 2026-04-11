@@ -1,11 +1,9 @@
 <?php
-
 namespace models;
 
 class Order extends BaseModel {
     protected $table = 'orders';
 
-    // Lấy thông tin 1 đơn hàng cụ thể
     public function find($id) {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
@@ -13,16 +11,26 @@ class Order extends BaseModel {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    // Lấy chi tiết các sách trong đơn hàng đó
     public function getOrderDetails($id) {
-    // JOIN bảng books dựa trên book_id
-    $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
-            FROM order_details od
-            JOIN books b ON od.book_id = b.id 
-            WHERE od.order_id = ?";
-    
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([$id]);
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-}
+        $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
+                FROM order_details od               
+                JOIN books b ON od.book_id = b.id 
+                WHERE od.order_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+   public function countTotalOrders() {
+        return $this->pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+    }
+
+    public function countPendingOrders() {
+        return $this->pdo->query("SELECT COUNT(*) FROM orders WHERE status = 'pending'")->fetchColumn();
+    }
+
+    public function sumTotalRevenue() {
+        $revenue = $this->pdo->query("SELECT SUM(total_price) FROM orders WHERE status = 'Completed'")->fetchColumn();
+        return $revenue ? $revenue : 0;
+    }
+
 }

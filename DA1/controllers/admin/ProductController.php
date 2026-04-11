@@ -9,21 +9,27 @@ class ProductController {
     public function __construct() {
         $this->model = new \Product();
     }
+    public function view($view, $data = []) {
+    extract($data);
+    include_once "views/admin/layout/header.php"; 
+    include_once "views/admin/$view.php"; 
+    echo '</div>'; 
+    include_once "views/admin/layout/footer.php";
+}
 
-    public function index() {
-        $products = $this->model->getAll();
-        view('product/index', compact('products'), 'admin');
-    }
+public function index() {
+    $products = $this->model->getAll();
+    $this->view('product/index', compact('products'));
+}
 
     public function create() {
-        view('product/create', [], 'admin');
+        $this->view('product/create', []);
     }
 
-// Trong ProductController.php hàm store()
+
 public function store() {
-    $data = $_POST; // Lấy dữ liệu từ form
+    $data = $_POST;
     
-    // Xử lý upload ảnh như t đã chỉ ở bước trước
     if (isset($_FILES['image_upload']) && $_FILES['image_upload']['size'] > 0) {
         $filename = time() . '_' . $_FILES['image_upload']['name'];
         move_uploaded_file($_FILES['image_upload']['tmp_name'], 'assets/uploads/img/' . $filename);
@@ -32,18 +38,18 @@ public function store() {
         $data['image'] = null;
     }
 
-    // Gọi hàm insert vừa tạo ở Bước 1
+
     $res = $this->model->insert($data);
 
     if ($res) {
         header("Location: ?action=admin/product");
-        exit(); // Chặn lỗi đơ trang
+        exit();
     }
 }
 
     public function edit() {
         $product = $this->model->getById($_GET['id']);
-        view('product/edit', compact('product'), 'admin');
+        $this->view('product/edit', compact('product'));
     }
 
 public function update($id) {
@@ -51,17 +57,13 @@ public function update($id) {
     $file = $_FILES['image_upload'];
 
     if ($file['size'] > 0) {
-        // Nếu có chọn ảnh mới
         $filename = $file['name']; 
-        // Lưu vào thư mục m đang có
         move_uploaded_file($file['tmp_name'], 'assets/uploads/img/' . $filename);
         $data['image'] = $filename; 
     } else {
-        // Nếu không chọn ảnh mới, dùng lại cái current_image từ form
         $data['image'] = $_POST['current_image'];
     }
 
-    // Gọi model để lưu vào bảng 'books'
     $res = $this->model->update($id, $data); 
 
     if ($res) {

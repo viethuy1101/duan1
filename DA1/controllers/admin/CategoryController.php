@@ -6,12 +6,18 @@ use models\Category;
 
 class CategoryController
 {
-    public function index()
-    {
-        $model = new Category();
-        $categories = $model->getAll();
+    public function view($view, $data = []) {
+        extract($data);
+        include_once "views/admin/layout/header.php"; 
+        include_once "views/admin/$view.php"; 
+        echo '</div>';
+        include_once "views/admin/layout/footer.php";
+    }
 
-        view('categories/index', compact('categories'), 'admin');
+    public function index() {
+        $model = new \models\Category();
+        $categories = $model->getAll();
+        $this->view('categories/index', compact('categories'));
     }
 
     public function create()
@@ -36,14 +42,14 @@ class CategoryController
         $model = new Category();
         $category = $model->find($_GET['id']);
 
-        view('categories/edit', compact('category'), 'admin');
+        $this->view('categories/edit', compact('category'), 'admin');
     }
 
     public function update()
     {
         $model = new Category();
         
-        // Sửa lỗi ID lấy từ URL
+     
         $id = $_GET['id'] ?? null;
         
         if ($id) {
@@ -63,4 +69,4 @@ class CategoryController
         header('Location: ' . BASE_URL . 'admin/category');
         exit();
     }
-} // Kết thúc class ở đây
+} 
