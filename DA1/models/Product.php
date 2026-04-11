@@ -59,5 +59,10 @@ class Product {
         $stmt = $this->conn->prepare("DELETE FROM books WHERE id=?");
         return $stmt->execute([$id]);
     }
+    public function countAll($table) {
+    $sql = "SELECT COUNT(*) as total FROM $table";
+    $result = $this->conn->query($sql)->fetch(); 
+    return $result['total'] ?? 0;
+}
 } 
 ?>

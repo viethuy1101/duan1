@@ -14,6 +14,29 @@
         .main-content { margin-left: 260px; flex: 1; padding: 40px 50px; }
         .card { border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important; border-radius: 15px !important; }
         .badge-custom { padding: 8px 16px; border-radius: 30px; font-weight: 600; font-size: 11px; }
+        .sidebar i { margin-right: 10px; }
     </style>
+    <div class="sidebar">
+    <a href="?action=admin" style="text-decoration: none;">
+        <h2>BOOK VERSE</h2>
+    </a>
+    <a href="?action=admin" class="<?= !isset($_GET['action']) || $_GET['action'] == 'admin' ? 'active' : '' ?>">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    <a href="?action=admin/product" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/product' ? 'active' : '' ?>">
+        <i class="bi bi-book"></i> Quản lý Sản phẩm
+    </a>
+    <a href="?action=admin/category" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/category' ? 'active' : '' ?>">
+        <i class="bi bi-list-ul"></i> Quản lý Danh mục
+    </a>
+    <a href="?action=admin/order" class="<?= isset($_GET['action']) && strpos($_GET['action'], 'admin/order') !== false ? 'active' : '' ?>">
+        <i class="bi bi-cart"></i> Quản lý Đơn hàng
+    </a>
+    <hr>
+    <a href="index.php"><i class="bi bi-house"></i> Về Trang Chủ</a>
+</div>
+
+<div class="main-content">
 </head>
 <body>
+    
