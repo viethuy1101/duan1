@@ -41,61 +41,92 @@
 
 .summary-item { display: flex; justify-content: space-between; margin-bottom: 12px; }
 .total-money { color: var(--primary); font-size: 1.5rem; font-weight: 800; border-top: 1px dashed #ddd; padding-top: 15px; }
+
+    .form-control:focus {
+        border-color: #212529 !important;
+        box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.1) !important;
+    }
+    hr.dashed {
+        border-top: 2px dashed #eee;
+        background-color: transparent;
+    }
 </style>
 </head>
 <body>
-    <div class="container checkout-grid">
-    <div class="col-left">
-        <h2 style="margin-bottom: 25px;">Thông tin nhận hàng</h2>
-        <form action="" method="POST" id="checkout-form">
-            <div class="form-group">
-                <label>Họ và tên</label>
-                <input type="text" name="fullname" class="form-control" placeholder="Nhập tên đầy đủ" required>
-            </div>
-            <div class="form-group">
-                <label>Số điện thoại</label>
-                <input type="tel" name="phone" class="form-control" placeholder="Số điện thoại của bạn" required>
-            </div>
-            <div class="form-group">
-                <label>Địa chỉ cụ thể</label>
-                <textarea name="address" class="form-control" rows="3" placeholder="Số nhà, đường, phường/xã..." required></textarea>
-            </div>
-            <div class="form-group">
-                <label>Ghi chú</label>
-                <input type="text" name="note" class="form-control" placeholder="Lưu ý cho shipper">
-            </div>
-        </form>
-    </div>
-
-    <div class="col-right">
-        <h2 style="margin-bottom: 20px;">Đơn hàng của bạn</h2>
-        <?php foreach($_SESSION['cart'] as $item): ?>
-            <div class="summary-item">
-                <span><?= $item['name'] ?> (x<?= $item['quantity'] ?>)</span>
-                <span><?= number_format($item['price'] * $item['quantity']) ?>đ</span>
-            </div>
-        <?php endforeach; ?>
-
-        <div style="margin-top: 20px; color: #666;">
-            <div class="summary-item">
-                <span>Tạm tính:</span>
-                <span><?= number_format($subtotal) ?>đ</span>
-            </div>
-            <div class="summary-item">
-                <span>Phí ship:</span>
-                <span><?= number_format($shipping) ?>đ</span>
+   <div class="container my-5">
+    <form action="<?= BASE_URL ?>?action=checkout-process" method="POST" class="row g-5">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                <h4 class="mb-4 fw-bold text-uppercase">Thông tin giao hàng</h4>
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Họ và tên người nhận</label>
+                    <input type="text" name="fullname" class="form-control p-3 border-light-subtle shadow-none" 
+                           style="border-radius: 12px;" value="<?= $_SESSION['user']['name'] ?? '' ?>" required>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-bold">Số điện thoại</label>
+                        <input type="tel" name="phone" class="form-control p-3 border-light-subtle shadow-none" 
+                               style="border-radius: 12px;" placeholder="0xxxxxxxxx" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label small fw-bold">Email</label>
+                        <input type="email" class="form-control p-3 border-light-subtle" 
+                               style="border-radius: 12px;" value="<?= $_SESSION['user']['email'] ?? '' ?>" readonly>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Địa chỉ chi tiết</label>
+                    <textarea name="address" class="form-control p-3 border-light-subtle shadow-none" 
+                              style="border-radius: 12px;" rows="3" placeholder="Số nhà, tên đường..." required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Ghi chú (Tùy chọn)</label>
+                    <textarea name="note" class="form-control p-3 border-light-subtle shadow-none" 
+                              style="border-radius: 12px;" rows="2"></textarea>
+                </div>
             </div>
         </div>
 
-        <div class="summary-item total-money">
-            <span>TỔNG:</span>
-            <span><?= number_format($total_money) ?>đ</span>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm p-4 sticky-top" style="border-radius: 20px; top: 20px;">
+                <h4 class="mb-4 fw-bold text-uppercase">Tóm tắt đơn hàng</h4>
+                <div class="cart-items mb-3" style="max-height: 350px; overflow-y: auto;">
+                    <?php foreach ($_SESSION['cart'] as $item): ?>
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="<?= $item['image'] ?>" class="rounded shadow-sm" style="width: 55px; height: 75px; object-fit: cover;">
+                        <div class="ms-3 flex-grow-1">
+                            <h6 class="mb-0 small fw-bold text-truncate" style="max-width: 180px;"><?= $item['name'] ?></h6>
+                            <small class="text-muted">x<?= $item['quantity'] ?></small>
+                        </div>
+                        <span class="small fw-bold"><?= number_format($item['price'] * $item['quantity']) ?>đ</span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Tạm tính</span>
+                    <span><?= number_format($subtotal) ?>đ</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Phí ship</span>
+                    <span>30,000đ</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mt-3">
+                    <span class="fw-bold fs-5">TỔNG CỘNG</span>
+                    <span class="fw-bold text-danger fs-4"><?= number_format($total_money) ?>đ</span>
+                </div>
+                <button type="submit" name="btn_place_order" class="btn btn-dark w-100 py-3 mt-4 rounded-pill fw-bold shadow">
+                    XÁC NHẬN ĐẶT HÀNG
+                </button>
+            </div>
         </div>
-
-        <button type="submit" form="checkout-form" name="btn_place_order" class="btn-place-order">
-            XÁC NHẬN ĐẶT HÀNG
-        </button>
-    </div>
+    </form>
 </div>
 </body>
 </html>

@@ -26,6 +26,7 @@ match ($action) {
     // CHECKOUT
     'checkout' => (new CheckoutController())->index(),
     'checkout-process' => (new CheckoutController())->process(),
+    
 
     default => die('404 CLIENT'),
 };

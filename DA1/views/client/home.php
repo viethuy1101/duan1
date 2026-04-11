@@ -7,7 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-<a href="?action=admin">Vào Admin</a>
+
 <img src="<?= rtrim(BASE_ASSETS_UPLOADS, '/') . '/img/banner.jpg' ?>" alt="Banner">
 <h3 class="mb-4 fw-bold">Chào mừng bạn đến với BookVerse!</h3>
 

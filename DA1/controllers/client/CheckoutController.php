@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
 
-// Namespace phải khớp với cấu trúc thư mục của bạn
 namespace controllers\client;
 
-class CheckoutController {
-    /**
-     * Hiển thị trang thanh toán
-     */
-    public function index() {
-        global $conn; // Đảm bảo biến kết nối database có sẵn
+use models\BaseModel;
 
-        // 1. Tính toán số tiền để hiển thị trên View
+class CheckoutController extends BaseModel {
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    // Hiển thị trang thanh toán
+    public function index() {
         $subtotal = 0;
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             foreach ($_SESSION['cart'] as $item) {
@@ -21,52 +22,76 @@ class CheckoutController {
         $shipping = 30000;
         $total_money = $subtotal + $shipping;
 
-        // 2. Gọi sang file View index của checkout để bắt đầu luồng nạp Layout
-        // Đường dẫn này phải trỏ đúng vào thư mục views/client/checkout/ của bạn
         include_once PATH_VIEW . 'client/checkout/index.php'; 
     }
 
-    /**
-     * Xử lý lưu đơn hàng khi người dùng nhấn đặt hàng
-     */
+    // Xử lý lưu đơn hàng
     public function process() {
-        global $conn;
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn_place_order'])) {
-            // Lấy dữ liệu từ form và xử lý bảo mật cơ bản
-            $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
-            $phone    = mysqli_real_escape_string($conn, $_POST['phone']);
-            $address  = mysqli_real_escape_string($conn, $_POST['address']);
-            $note     = mysqli_real_escape_string($conn, $_POST['note']);
+            $fullname = $_POST['fullname'] ?? '';
+            $phone    = $_POST['phone'] ?? '';
+            $address  = $_POST['address'] ?? '';
+            $note     = $_POST['note'] ?? '';
+            $user_id  = $_SESSION['user']['id'] ?? null;
             
-            // Tính lại tổng tiền để đảm bảo tính chính xác trước khi lưu
+            // Lấy ID sản phẩm đầu tiên từ giỏ hàng để lưu vào trường mới thêm của bảng orders
+            $product_ids = array_keys($_SESSION['cart']);
+            $first_product_id = $product_ids[0] ?? null;
+
             $subtotal = 0;
             foreach ($_SESSION['cart'] as $item) {
                 $subtotal += $item['price'] * $item['quantity'];
             }
             $total_money = $subtotal + 30000;
 
-            // Bước A: Lưu vào bảng orders
-            $sql_order = "INSERT INTO orders (fullname, phone, address, note, total_money) 
-                          VALUES ('$fullname', '$phone', '$address', '$note', '$total_money')";
-            
-            if (mysqli_query($conn, $sql_order)) {
-                $order_id = mysqli_insert_id($conn);
+            try {
+                $this->pdo->beginTransaction();
 
-                // Bước B: Lưu chi tiết từng sản phẩm vào bảng order_details
-                foreach ($_SESSION['cart'] as $product_id => $item) {
-                    $qty = (int)$item['quantity'];
-                    $price = (float)$item['price'];
-                    $sql_detail = "INSERT INTO order_details (order_id, product_id, quantity, price) 
-                                   VALUES ('$order_id', '$product_id', '$qty', '$price')";
-                    mysqli_query($conn, $sql_detail);
+                // 1. Lưu vào bảng orders (Khớp hoàn toàn với các trường bạn đã thêm)
+                $sql_order = "INSERT INTO orders (user_id, product_id, fullname, phone, address, note, total_money, status) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $this->pdo->prepare($sql_order);
+                $stmt->execute([
+                    $user_id, 
+                    $first_product_id, 
+                    $fullname, 
+                    $phone, 
+                    $address, 
+                    $note, 
+                    $total_money, 
+                    'Chờ xác nhận'
+                ]);
+                
+                $order_id = $this->pdo->lastInsertId();
+
+                // 2. Lưu vào bảng order_details để quản lý số lượng sách
+                $sql_detail = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+                $stmt_detail = $this->pdo->prepare($sql_detail);
+
+                foreach ($_SESSION['cart'] as $p_id => $item) {
+                    $stmt_detail->execute([
+                        $order_id, 
+                        $p_id, 
+                        (int)$item['quantity'], 
+                        (float)$item['price']
+                    ]);
                 }
 
-                // Bước C: Xóa giỏ hàng và chuyển trang thành công
+                $this->pdo->commit();
+
+                // Xóa giỏ hàng và chuyển hướng
                 unset($_SESSION['cart']);
                 header("Location: " . BASE_URL . "?action=order-success&id=" . $order_id);
                 exit();
+
+            } catch (\Exception $e) {
+                $this->pdo->rollBack();
+                die("Lỗi hệ thống khi đặt hàng: " . $e->getMessage());
             }
         }
+    }
+
+    public function success() {
+        include_once PATH_VIEW . 'client/checkout/success.php';
     }
 }
