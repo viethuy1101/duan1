@@ -11,17 +11,25 @@ class DashboardController {
     }
 
    public function index() {
-    $productModel = new \Product(); 
-
-    $totalBooks = $productModel->countAll('books'); 
-    $totalCats  = $productModel->countAll('categories'); 
+    $productModel = new \Product();
+    
+    $totalBooks = $productModel->countAll('books');
+    $totalCats = $productModel->countAll('categories');
     $totalOrders = $productModel->countAll('orders');
 
+    $latestBooks = $productModel->getLatest(5); 
+
+    $sqlRevenue = "SELECT SUM(total_price) as total FROM orders WHERE status != 'canceled'";
+    $stmt = connectDB()->query($sqlRevenue);
+    $revenueData = $stmt->fetch();
+    $totalRevenue = $revenueData['total'] ?? 0;
+
     $this->view('dashboard', [
-        'title'          => 'Dashboard',
-        'totalProducts'  => $totalBooks,
+        'totalProducts'   => $totalBooks,
         'totalCategories' => $totalCats,
-        'totalOrders'    => $totalOrders
+        'totalOrders'     => $totalOrders,
+        'totalRevenue'    => $totalRevenue,
+        'latestBooks'     => $latestBooks
     ]);
 }
 }

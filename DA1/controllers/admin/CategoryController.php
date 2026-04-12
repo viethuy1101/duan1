@@ -6,29 +6,32 @@ use models\Category;
 
 class CategoryController
 {
-    public function view($view, $data = []) {
+    // Hàm này dùng để load giao diện chung cho Admin
+    public function renderView($view, $data = []) {
         extract($data);
+        // Header này đã chứa Sidebar bên trong (theo các bước trước mình làm)
         include_once "views/admin/layout/header.php"; 
         include_once "views/admin/$view.php"; 
-        echo '</div>';
+        echo '</div>'; // Đóng div main-content từ header
         include_once "views/admin/layout/footer.php";
     }
 
     public function index() {
-        $model = new \models\Category();
+        $model = new Category();
         $categories = $model->getAll();
-        $this->view('categories/index', compact('categories'));
+        // Sửa từ $this->view thành $this->renderView
+        $this->renderView('categories/index', compact('categories'));
     }
 
     public function create()
     {
-        view('categories/create', [], 'admin');
+        // QUAN TRỌNG: Thay vì dùng view() global, hãy dùng hàm của class này
+        $this->renderView('categories/create');
     }
 
     public function store()
     {
         $model = new Category();
-
         $model->insert([
             'name' => $_POST['name']
         ]);
@@ -41,22 +44,18 @@ class CategoryController
     {
         $model = new Category();
         $category = $model->find($_GET['id']);
-
-        $this->view('categories/edit', compact('category'), 'admin');
+        // Sửa tại đây nữa để đồng bộ
+        $this->renderView('categories/edit', compact('category'));
     }
 
     public function update()
     {
         $model = new Category();
-        
-     
         $id = $_GET['id'] ?? null;
-        
         if ($id) {
             $model->update($id, ['name' => $_POST['name']]);
             $_SESSION['message'] = 'Cập nhật danh mục thành công!';
         }
-        
         header('Location: ' . BASE_URL . 'admin/category');
         exit();
     }
@@ -69,4 +68,4 @@ class CategoryController
         header('Location: ' . BASE_URL . 'admin/category');
         exit();
     }
-} 
+}
