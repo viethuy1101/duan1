@@ -1,41 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container-fluid mt-4">
-    <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
-        <div class="card-header bg-white py-3 border-0">
-            <h5 class="mb-0 fw-bold text-primary">
-                <i class="bi bi-pencil-fill me-2"></i>Cập nhật danh mục
-            </h5>
-        </div>
-        <div class="card-body p-4">
-           <form action="?action=admin/category/update&id=<?= $category['id'] ?>" method="POST">
-                <div class="mb-4">
-                    <label class="form-label fw-bold small text-muted text-uppercase">Tên danh mục</label>
-                    <input type="text" name="name" class="form-control form-control-lg border-2" 
-                           value="<?= $category['name'] ?>" required>
+<style>
+    .card-custom { border: none !important; box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important; border-radius: 20px !important; }
+    .btn-submit { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; font-weight: 700; padding: 12px; border-radius: 10px; border: none; }
+</style>
+
+<div class="main-content"> <div class="container py-5">
+        <div class="card card-custom p-4">
+            <h3 class="text-primary fw-bold mb-4"><i class="bi bi-pencil-square me-2"></i>CẬP NHẬT DANH MỤC</h3>
+            
+            <form action="<?= BASE_URL ?>admin/category/update?id=<?= $category['id'] ?>" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">TÊN DANH MỤC SÁCH</label>
+                    <input type="text" name="name" class="form-control" value="<?= $category['name'] ?>" required>
                 </div>
 
-                <div class="row g-2 mt-4">
-                    <div class="col-8">
-                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">
-                            Xác nhận thay đổi
-                        </button>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">MÔ TẢ NGẮN</label>
+                    <textarea name="description" class="form-control" rows="3"><?= $category['description'] ?? '' ?></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">TRẠNG THÁI</label>
+                        <select name="status" class="form-select">
+                            <?php $currentStatus = $category['status'] ?? 1; ?>
+                            <option value="1" <?= $currentStatus == 1 ? 'selected' : '' ?>>Đang hoạt động</option>
+                            <option value="0" <?= $currentStatus == 0 ? 'selected' : '' ?>>Tạm ngưng</option>
+                        </select>
                     </div>
-                    <div class="col-4">
-                        <a href="?action=admin/category" class="btn btn-light border w-100 py-2 text-muted">
-                            Hủy
-                        </a>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">THỨ TỰ HIỂN THỊ</label>
+                        <input type="number" name="sort_order" class="form-control" value="<?= $category['sort_order'] ?? 0 ?>">
                     </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-submit w-100 mb-2">XÁC NHẬN THAY ĐỔI</button>
+                    <a href="<?= BASE_URL ?>admin/category" class="btn btn-light w-100">HỦY BỎ</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-</body>
-</html>

@@ -15,8 +15,6 @@ class Product {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
-
-    // Hàm này để lưu sản phẩm mới
     public function insert($data) {
         $sql = "INSERT INTO books (title, author, price, description, image, stock, category_id) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -63,6 +61,14 @@ class Product {
     $sql = "SELECT COUNT(*) as total FROM $table";
     $result = $this->conn->query($sql)->fetch(); 
     return $result['total'] ?? 0;
+}
+   public function getLatest($limit = 5) {
+    $sql = "SELECT books.*, categories.name as category_name 
+            FROM books 
+            LEFT JOIN categories ON books.category_id = categories.id 
+            ORDER BY books.id DESC 
+            LIMIT $limit";
+    return $this->conn->query($sql)->fetchAll();
 }
 } 
 ?>

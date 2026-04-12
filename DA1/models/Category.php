@@ -5,16 +5,31 @@ namespace models;
 class Category extends BaseModel
 {
     protected $table = 'categories';
-
-    // Thêm hàm update nếu lớp cha chưa có
-    public function update($id, $data)
+     function getAll()
     {
-        $sql = "UPDATE {$this->table} SET name = ? WHERE id = ?";
-        $stmt = $this->pdo->prepare($sql); // Dùng pdo từ BaseModel
-        return $stmt->execute([$data['name'], $id]);
+        $sql = "SELECT c.*, COUNT(p.id) as total_books 
+                FROM {$this->table} c 
+                LEFT JOIN books p ON c.id = p.category_id 
+                GROUP BY c.id 
+                ORDER BY c.id DESC";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+   public function update($id, $data)
+    {
+        $sql = "UPDATE {$this->table} SET name = ?, description = ?, status = ?, sort_order = ? WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            $data['name'], 
+            $data['description'], 
+            $data['status'], 
+            $data['sort_order'], 
+            $id
+        ]);
     }
 
-    // Thêm hàm find để trang Edit lấy được dữ liệu cũ
     public function find($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
@@ -22,4 +37,5 @@ class Category extends BaseModel
         $stmt->execute([$id]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+    
 }

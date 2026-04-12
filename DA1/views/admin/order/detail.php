@@ -1,27 +1,25 @@
-    <?php
-    ?>
-
-    <style>
+<style>
         .invoice-wrapper { background: #f8f9fa; border-radius: 20px; }
         .card { border: none; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); transition: all 0.3s; }
         .text-primary { color: #2c3e50 !important; }
         .bg-dark-blue { background-color: #2c3e50 !important; }
         .img-book { box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #eee; object-fit: cover; }
-
+        .transition-all { transition: all 0.3s ease; }
+        .transition-all:hover { transform: translateY(-2px); shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         @media print {
-    body * { visibility: hidden; }
-    #print-area, #print-area * { visibility: visible; }
-    #print-area {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 10px !important;
-    }
-    .print-hide, .btn, .card.bg-dark-blue { display: none !important; }
-}
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 10px !important;
+            }
+            .print-hide, .btn, .card.bg-dark-blue { display: none !important; }
+        }
     </style>
 
     <div id="print-area" class="container-fluid p-4 invoice-wrapper">
@@ -59,16 +57,35 @@
                     <div class="card-body p-4">
                         <h6 class="text-uppercase fw-bold text-muted mb-3 small"><i class="fas fa-credit-card me-2 text-primary"></i>Trạng thái & Thanh toán</h6>
                         <div class="mb-3">
-                            <label class="small text-muted d-block">Hình thức thanh toán:</label>
-                            <span class="fw-bold text-primary fs-6">
-                                <?= $order['payment_method'] == 'bank' ? '🏦 Chuyển khoản ngân hàng' : '💵 Tiền mặt (COD)' ?>
-                            </span>
+                           <p class="text-muted small mb-1">Hình thức thanh toán:</p>
+                           <div class="fw-bold text-dark">
+                                <i class="bi bi-cash-stack text-success me-1"></i> Tiền mặt (COD)
+                           </div>
                         </div>
                         <div>
-                            <label class="small text-muted d-block">Tình trạng xử lý:</label>
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase">
-                                <i class="fas fa-clock me-1"></i> <?= $order['status'] ?>
-                            </span>
+                            <p class="text-muted small mb-1">Tình trạng xử lý:</p>
+                            <?php
+                            $status = $order['status'] ?? 'pending';
+                            switch (strtolower($status)) {
+                                case 'pending':
+                                    echo '<span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-clock-history me-1"></i> Chờ xử lý</span>';
+                                    break;
+                                case 'confirmed':
+                                    echo '<span class="badge bg-info text-white px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-check-circle me-1"></i> Đã xác nhận</span>';
+                                    break;
+                                case 'shipping':
+                                    echo '<span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-truck me-1"></i> Đang giao hàng</span>';
+                                    break;
+                                case 'completed':
+                                    echo '<span class="badge bg-success text-white px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-house-check me-1"></i> Đã hoàn thành</span>';
+                                    break;
+                                case 'cancelled':
+                                    echo '<span class="badge bg-danger text-white px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-x-circle me-1"></i> Đã hủy</span>';
+                                    break;
+                                default:
+                                    echo '<span class="badge bg-secondary text-white px-3 py-2 rounded-pill">Không xác định</span>';
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -135,6 +152,12 @@
                     </tfoot>
                 </table>
             </div>
+        </div>
+
+        <div class="print-hide mt-5 mb-4 d-flex justify-content-center border-top pt-4">
+            <a href="<?= BASE_URL ?>admin/order" class="btn btn-outline-secondary btn-lg rounded-pill px-5 shadow-sm transition-all">
+                <i class="bi bi-arrow-left-circle me-2"></i> Quay lại danh sách đơn hàng
+            </a>
         </div>
 
         <div class="card bg-dark-blue text-white rounded-4 border-0 shadow print-hide">
