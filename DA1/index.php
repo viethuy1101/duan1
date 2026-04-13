@@ -1,6 +1,10 @@
 <?php 
 
-session_start();
+session_set_cookie_params(0);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 spl_autoload_register(function ($class) {
     $normalized = str_replace('\\', '/', $class);
@@ -30,5 +34,4 @@ spl_autoload_register(function ($class) {
 require_once './configs/env.php';
 require_once './configs/helper.php';
 
-// Điều hướng
 require_once './routes/index.php';

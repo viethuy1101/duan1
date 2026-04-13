@@ -166,3 +166,39 @@
         transform: scale(1.03);
         border-color: #0d6efd !important;
     }
+.sidebar {
+    background-color: #1a1a1a !important; /* Thêm !important để chắc chắn nó màu đen */
+    height: 100vh;
+    padding: 20px 0;
+    position: fixed; /* Giữ menu cố định khi cuộn trang */
+    width: 250px;
+}
+
+.sidebar h2 {
+    color: #0d6efd;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #b3b3b3 !important; /* Màu xám */
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+/* Khi di chuột vào hoặc trang đang mở (active) */
+.menu-item:hover, 
+.menu-item.active {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-left: 4px solid #0d6efd;
+}
+
+.menu-item i {
+    width: 30px;
+    font-size: 1.2rem;
+}

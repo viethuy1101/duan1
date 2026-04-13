@@ -1,14 +1,29 @@
 <div class="sidebar shadow">
-    <h2>BOOK VERSE</h2>
-    <a href="?action=admin"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="?action=admin/product"><i class="bi bi-book"></i> Quản Lý Sản Phẩm</a>
-    <a href="?action=admin/category"><i class="bi bi-tags"></i> Quản Lý Danh Mục</a>
-    <a href="?action=admin/order" class="<?= ($_GET['action'] ?? '') == 'admin/order' ? 'active' : '' ?>"><i class="bi bi-cart"></i> Quản Lý Đơn Hàng</a>
-    <hr class="mx-3 opacity-25">
-    <a href="?action=client"><i class="bi bi-house"></i> Về Trang Chủ</a>
-</div>
-<div class="main-content">
+    <h2 class="text-primary fw-bold px-3 py-4">BOOK VERSE</h2>
+    
+    <a href="?action=admin" class="menu-item <?= (!isset($_GET['action']) || $_GET['action'] == 'admin') ? 'active' : '' ?>">
+        <i class="bi bi-speedometer2 me-2"></i> <span>Dashboard</span>
+    </a>
+    
+    <a href="?action=admin/product" class="menu-item <?= (strpos($_GET['action'] ?? '', 'admin/product') !== false) ? 'active' : '' ?>">
+        <i class="bi bi-book me-2"></i> <span>Quản Lý Sản Phẩm</span>
+    </a>
+    
+    <a href="?action=admin/category" class="menu-item <?= (strpos($_GET['action'] ?? '', 'admin/category') !== false) ? 'active' : '' ?>">
+        <i class="bi bi-tags me-2"></i> <span>Quản Lý Danh Mục</span>
+    </a>
+    
+    <a href="?action=admin/order" class="menu-item <?= (strpos($_GET['action'] ?? '', 'admin/order') !== false) ? 'active' : '' ?>">
+        <i class="bi bi-cart me-2"></i> <span>Quản Lý Đơn Hàng</span>
+    </a>
 
-</div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <a href="?action=admin/users" class="menu-item <?= (strpos($_GET['action'] ?? '', 'admin/users') !== false) ? 'active' : '' ?>">
+        <i class="bi bi-people-fill me-2"></i> <span>Quản Lý Tài Khoản</span>
+    </a>
+    
+    <hr class="mx-3 my-4 opacity-25">
+    
+    <a href="?action=client" class="menu-item">
+        <i class="bi bi-house me-2"></i> <span>Về Trang Chủ</span>
+    </a>
+</div>

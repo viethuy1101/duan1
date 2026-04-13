@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - Book Verse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -17,12 +18,27 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="?action=admin" style="text-decoration: none;"><h2>BOOK VERSE</h2></a>
-        <a href="?action=admin" class="<?= !isset($_GET['action']) || $_GET['action'] == 'admin' ? 'active' : '' ?>"><i class="bi bi-speedometer2"></i> Dashboard</a>
-        <a href="?action=admin/product" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/product' ? 'active' : '' ?>"><i class="bi bi-book"></i> Quản lý Sản phẩm</a>
-        <a href="?action=admin/category" class="<?= isset($_GET['action']) && strpos($_GET['action'], 'admin/category') !== false ? 'active' : '' ?>"><i class="bi bi-list-ul"></i> Quản lý Danh mục</a>
-        <a href="?action=admin/order" class="<?= isset($_GET['action']) && strpos($_GET['action'], 'admin/order') !== false ? 'active' : '' ?>"><i class="bi bi-cart"></i> Quản lý Đơn hàng</a>
-        <hr class="opacity-25 mx-3">
-        <a href="index.php"><i class="bi bi-house"></i> Về Trang Chủ</a>
-    </div>
+    <a href="?action=admin" style="text-decoration: none;"><h2>BOOK VERSE</h2></a>
+    
+    <a href="?action=admin" class="<?= !isset($_GET['action']) || $_GET['action'] == 'admin' ? 'active' : '' ?>">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    <a href="?action=admin/product" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/product' ? 'active' : '' ?>">
+        <i class="bi bi-book"></i> Quản lý sản phẩm
+    </a>
+    <a href="?action=admin/category" class="<?= isset($_GET['action']) && strpos($_GET['action'], 'admin/category') !== false ? 'active' : '' ?>">
+        <i class="bi bi-tags"></i> Quản lý danh mục
+    </a>
+    <a href="?action=admin/order" class="<?= isset($_GET['action']) && strpos($_GET['action'], 'admin/order') !== false ? 'active' : '' ?>">
+        <i class="bi bi-cart"></i> Quản lý đơn hàng
+    </a>
+
+    <a href="?action=admin/users" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/users' ? 'active' : '' ?>">
+        <i class="bi bi-people-fill"></i> Quản lý tài khoản
+    </a>
+
+    <hr class="opacity-25 mx-3">
+    
+    <a href="index.php"><i class="bi bi-house"></i> Về Trang Chủ</a>
+</div>
     <div class="main-content">
