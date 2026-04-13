@@ -56,15 +56,26 @@ class Order extends BaseModel {
         }
     }
 
-    // Lấy chi tiết các sách trong đơn hàng đó
-    public function getOrderDetails($id) {
+    // Lấy danh sách đơn hàng cho khách hàng xem
+    public function getOrderById($id) {
+    $sql = "SELECT * FROM {$this->table} WHERE id = ?";
+    return $this->query($sql, [$id])->fetch(\PDO::FETCH_ASSOC);
+}
+
+    // Lấy danh sách đơn hàng của một user
+    public function getOrdersByUserId($userId) {
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = ? ORDER BY created_at DESC";
+        return $this->query($sql, [$userId])->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // 2. Lấy chi tiết từng cuốn sách trong 1 đơn hàng cụ thể
+    // Dùng cho cả Client xem chi tiết và Admin quản lý
+    public function getOrderDetails($orderId) {
         $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
                 FROM order_details od
                 JOIN books b ON od.book_id = b.id 
                 WHERE od.order_id = ?";
-    
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        return $this->query($sql, [$orderId])->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

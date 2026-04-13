@@ -104,7 +104,7 @@
                 <div class="cart-items mb-3" style="max-height: 350px; overflow-y: auto;">
                     <?php foreach ($_SESSION['cart'] as $item): ?>
                     <div class="d-flex align-items-center mb-3">
-                        <img src="<?= $item['image'] ?>" class="rounded shadow-sm" style="width: 55px; height: 75px; object-fit: cover;">
+                        <img src="<?= BASE_ASSETS_UPLOADS . 'img/' . $item['image'] ?>" class="rounded shadow-sm" style="width: 55px; height: 75px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=' + encodeURIComponent('No+Image')">
                         <div class="ms-3 flex-grow-1">
                             <h6 class="mb-0 small fw-bold text-truncate" style="max-width: 180px;"><?= $item['name'] ?></h6>
                             <small class="text-muted">x<?= $item['quantity'] ?></small>

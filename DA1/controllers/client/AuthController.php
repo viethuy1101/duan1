@@ -2,6 +2,7 @@
 
 namespace controllers\client;
 
+use models\Order;
 use models\User;
 
 class AuthController
@@ -79,38 +80,67 @@ class AuthController
     exit();
 }
 public function profile()
-{
-    // 1. Kiểm tra đăng nhập
-    if (!isset($_SESSION['user'])) {
-        header("Location: " . BASE_URL . "?action=login");
+    {
+        // 1. Kiểm tra đăng nhập
+        if (!isset($_SESSION['user'])) {
+            header("Location: " . BASE_URL . "?action=login");
+            exit();
+        }
+
+        $userId = $_SESSION['user']['id'];
+        $orderModel = new Order(); // Khởi tạo model đơn hàng
+
+        // 2. Xử lý cập nhật thông tin cá nhân
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $dataUpdate = [
+                'name'    => $_POST['name'],
+                'email'   => $_POST['email'],
+                'phone'   => $_POST['phone'],
+                'address' => $_POST['address']
+            ];
+            $this->userModel->updateProfile($userId, $dataUpdate);
+            
+            // Cập nhật lại session để hiển thị tên mới ngay lập tức
+            $_SESSION['user']['name'] = $_POST['name'];
+            
+            echo "<script>alert('Cập nhật thành công!'); window.location.href='?action=profile';</script>";
+            exit();
+        }
+
+        // 3. Lấy thông tin user và danh sách đơn hàng
+        $user = $this->userModel->getUserById($userId);
+        $orders = $orderModel->getOrdersByUserId($userId);
+
+        // 4. Render view và truyền cả 'orderModel' để dùng cho nút "con mắt"
+        $this->render('client.auth.profile', [
+            'user'       => $user,
+            'orders'     => $orders,
+            'orderModel' => $orderModel 
+        ]);
+    }
+public function orderDetail() {
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        header("Location: ?action=profile");
         exit();
     }
 
-    $userId = $_SESSION['user']['id'];
+    $orderModel = new \models\Order();
+    
+    // 1. Lấy thông tin đơn hàng (để lấy ngày đặt, tổng tiền, địa chỉ)
+    $order = $orderModel->getOrderById($id);
+    
+    // 2. Lấy danh sách sản phẩm trong đơn đó (hàm bạn đã viết)
+    $details = $orderModel->getOrderDetails($id);
 
-    // 2. Nếu người dùng nhấn nút Lưu (POST)
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $dataUpdate = [
-            'name'    => $_POST['name'],
-            'email'   => $_POST['email'],
-            'phone'   => $_POST['phone'],
-            'address' => $_POST['address']
-        ];
+    // 3. Tính ngày giao hàng dự kiến (Ví dụ: 3 ngày sau ngày đặt)
+    $orderDate = strtotime($order['created_at']);
+    $expectedDate = date('d/m/Y', strtotime('+3 days', $orderDate));
 
-        // Cập nhật vào DB
-        $this->userModel->updateProfile($userId, $dataUpdate);
-
-        // Cập nhật lại tên trong Session để hiển thị trên Header ngay lập tức
-        $_SESSION['user']['name'] = $_POST['name'];
-
-        echo "<script>alert('Cập nhật thành công!'); window.location.href='?action=profile';</script>";
-        exit();
-    }
-
-    // 3. Lấy dữ liệu mới nhất từ DB để đổ ra form
-    $user = $this->userModel->getUserById($userId);
-
-    // 4. Render view (Theo chuẩn render('folder.file') của bạn)
-    $this->render('client.auth.profile', ['user' => $user]);
+    $this->render('client.auth.order_detail', [
+        'order' => $order,
+        'details' => $details,
+        'expectedDate' => $expectedDate
+    ]);
 }
 }
