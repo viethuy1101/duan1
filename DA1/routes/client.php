@@ -17,6 +17,7 @@ match ($action) {
     'post-login' => (new AuthController())->postLogin(),
     'post-register' => (new AuthController())->postRegister(),
     'logout' => (new AuthController())->logout(),
+    'profile' => (new AuthController())->profile(),
 
     // CART
     'cart' => (new CartController())->index(),
@@ -26,7 +27,7 @@ match ($action) {
     // CHECKOUT
     'checkout' => (new CheckoutController())->index(),
     'checkout-process' => (new CheckoutController())->process(),
-    
+    'order-success' => (new CheckoutController())->success(),
 
     default => die('404 CLIENT'),
 };

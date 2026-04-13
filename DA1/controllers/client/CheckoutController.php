@@ -3,16 +3,26 @@ declare(strict_types=1);
 
 namespace controllers\client;
 
-use models\BaseModel;
+use models\Order;
+use models\User;
 
-class CheckoutController extends BaseModel {
+class CheckoutController {
+    protected Order $orderModel;
+    protected User $userModel;
 
     public function __construct() {
-        parent::__construct();
+        $this->orderModel = new Order();
+        $this->userModel = new User();
     }
 
     // Hiển thị trang thanh toán
     public function index() {
+        $currentUser = null;
+        if (isset($_SESSION['user'])) {
+            // Lấy dữ liệu mới nhất từ DB (bao gồm phone, address vừa thêm)
+            $currentUser = $this->userModel->getUserById($_SESSION['user']['id']);
+        }
+
         $subtotal = 0;
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             foreach ($_SESSION['cart'] as $item) {
@@ -22,7 +32,7 @@ class CheckoutController extends BaseModel {
         $shipping = 30000;
         $total_money = $subtotal + $shipping;
 
-        include_once PATH_VIEW . 'client/checkout/index.php'; 
+        include_once PATH_VIEW . 'client/checkout/index.php';
     }
 
     // Xử lý lưu đơn hàng
@@ -45,39 +55,18 @@ class CheckoutController extends BaseModel {
             $total_money = $subtotal + 30000;
 
             try {
-                $this->pdo->beginTransaction();
+                $orderData = [
+                    'user_id' => $user_id,
+                    'product_id' => $first_product_id,
+                    'fullname' => $fullname,
+                    'phone' => $phone,
+                    'address' => $address,
+                    'note' => $note,
+                    'total_money' => $total_money,
+                    'status' => 'Chờ xác nhận'
+                ];
 
-                // 1. Lưu vào bảng orders (Khớp hoàn toàn với các trường bạn đã thêm)
-                $sql_order = "INSERT INTO orders (user_id, product_id, fullname, phone, address, note, total_money, status) 
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $this->pdo->prepare($sql_order);
-                $stmt->execute([
-                    $user_id, 
-                    $first_product_id, 
-                    $fullname, 
-                    $phone, 
-                    $address, 
-                    $note, 
-                    $total_money, 
-                    'Chờ xác nhận'
-                ]);
-                
-                $order_id = $this->pdo->lastInsertId();
-
-                // 2. Lưu vào bảng order_details để quản lý số lượng sách
-                $sql_detail = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
-                $stmt_detail = $this->pdo->prepare($sql_detail);
-
-                foreach ($_SESSION['cart'] as $p_id => $item) {
-                    $stmt_detail->execute([
-                        $order_id, 
-                        $p_id, 
-                        (int)$item['quantity'], 
-                        (float)$item['price']
-                    ]);
-                }
-
-                $this->pdo->commit();
+                $order_id = $this->orderModel->saveOrderWithDetails($orderData, $_SESSION['cart']);
 
                 // Xóa giỏ hàng và chuyển hướng
                 unset($_SESSION['cart']);
@@ -85,7 +74,6 @@ class CheckoutController extends BaseModel {
                 exit();
 
             } catch (\Exception $e) {
-                $this->pdo->rollBack();
                 die("Lỗi hệ thống khi đặt hàng: " . $e->getMessage());
             }
         }

@@ -56,41 +56,47 @@
    <div class="container my-5">
     <form action="<?= BASE_URL ?>?action=checkout-process" method="POST" class="row g-5">
         <div class="col-lg-7">
-            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
-                <h4 class="mb-4 fw-bold text-uppercase">Thông tin giao hàng</h4>
-                
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Họ và tên người nhận</label>
-                    <input type="text" name="fullname" class="form-control p-3 border-light-subtle shadow-none" 
-                           style="border-radius: 12px;" value="<?= $_SESSION['user']['name'] ?? '' ?>" required>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label small fw-bold">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control p-3 border-light-subtle shadow-none" 
-                               style="border-radius: 12px;" placeholder="0xxxxxxxxx" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label small fw-bold">Email</label>
-                        <input type="email" class="form-control p-3 border-light-subtle" 
-                               style="border-radius: 12px;" value="<?= $_SESSION['user']['email'] ?? '' ?>" readonly>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Địa chỉ chi tiết</label>
-                    <textarea name="address" class="form-control p-3 border-light-subtle shadow-none" 
-                              style="border-radius: 12px;" rows="3" placeholder="Số nhà, tên đường..." required></textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Ghi chú (Tùy chọn)</label>
-                    <textarea name="note" class="form-control p-3 border-light-subtle shadow-none" 
-                              style="border-radius: 12px;" rows="2"></textarea>
-                </div>
+    <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+        <h4 class="mb-4 fw-bold text-uppercase">Thông tin giao hàng</h4>
+        
+        <div class="mb-3">
+            <label class="form-label small fw-bold">Họ và tên người nhận</label>
+            <input type="text" name="fullname" class="form-control p-3 border-light-subtle shadow-none" 
+                   style="border-radius: 12px;" 
+                   value="<?= $currentUser['name'] ?? $_SESSION['user']['name'] ?? '' ?>" required>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label small fw-bold">Số điện thoại</label>
+                <input type="tel" name="phone" class="form-control p-3 border-light-subtle shadow-none" 
+                       style="border-radius: 12px;" placeholder="0xxxxxxxxx" 
+                       value="<?= $currentUser['phone'] ?? '' ?>" required>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label class="form-label small fw-bold">Email</label>
+                <input type="email" class="form-control p-3 border-light-subtle bg-light" 
+                       style="border-radius: 12px;" 
+                       value="<?= $currentUser['email'] ?? $_SESSION['user']['email'] ?? '' ?>" readonly>
             </div>
         </div>
+        
+        <div class="mb-3">
+            <label class="form-label small fw-bold">Địa chỉ chi tiết</label>
+            <textarea name="address" class="form-control p-3 border-light-subtle shadow-none" 
+                      style="border-radius: 12px;" rows="3" 
+                      placeholder="Số nhà, tên đường..." required><?= $currentUser['address'] ?? '' ?></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label small fw-bold">Ghi chú (Tùy chọn)</label>
+            <textarea name="note" class="form-control p-3 border-light-subtle shadow-none" 
+                      style="border-radius: 12px;" rows="2" 
+                      placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea>
+        </div>
+    </div>
+</div>
 
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm p-4 sticky-top" style="border-radius: 20px; top: 20px;">

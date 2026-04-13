@@ -78,4 +78,39 @@ class AuthController
     header("Location: " . BASE_URL);
     exit();
 }
+public function profile()
+{
+    // 1. Kiểm tra đăng nhập
+    if (!isset($_SESSION['user'])) {
+        header("Location: " . BASE_URL . "?action=login");
+        exit();
+    }
+
+    $userId = $_SESSION['user']['id'];
+
+    // 2. Nếu người dùng nhấn nút Lưu (POST)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $dataUpdate = [
+            'name'    => $_POST['name'],
+            'email'   => $_POST['email'],
+            'phone'   => $_POST['phone'],
+            'address' => $_POST['address']
+        ];
+
+        // Cập nhật vào DB
+        $this->userModel->updateProfile($userId, $dataUpdate);
+
+        // Cập nhật lại tên trong Session để hiển thị trên Header ngay lập tức
+        $_SESSION['user']['name'] = $_POST['name'];
+
+        echo "<script>alert('Cập nhật thành công!'); window.location.href='?action=profile';</script>";
+        exit();
+    }
+
+    // 3. Lấy dữ liệu mới nhất từ DB để đổ ra form
+    $user = $this->userModel->getUserById($userId);
+
+    // 4. Render view (Theo chuẩn render('folder.file') của bạn)
+    $this->render('client.auth.profile', ['user' => $user]);
+}
 }

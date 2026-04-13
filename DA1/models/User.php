@@ -36,4 +36,23 @@ class User extends BaseModel
         $sql = "SELECT id FROM {$this->table} WHERE email = ?";
         return $this->query($sql, [$email])->fetch();
     }
+    // Lấy thông tin người dùng theo ID
+    public function getUserById($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ?";
+        return $this->query($sql, [$id])->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    // Cập nhật thông tin cá nhân (không đổi mật khẩu ở đây)
+    public function updateProfile($id, $data)
+    {
+        $sql = "UPDATE {$this->table} SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?";
+        return $this->query($sql, [
+            $data['name'],
+            $data['email'],
+            $data['phone'],
+            $data['address'],
+            $id
+        ]);
+    }
 }
