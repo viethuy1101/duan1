@@ -152,7 +152,9 @@
             <p class="mb-0 text-muted small fw-medium">Hiển thị tất cả đơn hàng hiện có trong hệ thống Book Verse</p>
         </div>
               <button class="btn btn-success rounded-pill px-4 shadow-sm fw-bold">
-    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Xuất báo cáo
+        <a href="<?= BASE_URL ?>admin/order/export" class="btn btn-success w-100 py-2 rounded-pill fw-bold text-white shadow-sm transition-all">
+    <i class="fas fa-file-excel me-2"></i>Xuất báo cáo (CSV)
+</a>
 </button>
     </div>
 </div>

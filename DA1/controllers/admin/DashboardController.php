@@ -1,7 +1,11 @@
 <?php
 namespace controllers\admin;
 
-class DashboardController {
+class DashboardController extends BaseAdminController{
+    public function __construct() {
+        parent::__construct();
+    }
+
     public function view($view, $data = []) {
         extract($data);
         include_once "views/admin/layout/header.php"; 
@@ -10,26 +14,24 @@ class DashboardController {
         include_once "views/admin/layout/footer.php";
     }
 
-   public function index() {
-    $productModel = new \Product();
-    
-    $totalBooks = $productModel->countAll('books');
-    $totalCats = $productModel->countAll('categories');
-    $totalOrders = $productModel->countAll('orders');
+    public function index() {
+        $productModel = new \Product();
+        $totalBooks = $productModel->countAll('books');
+        $totalCats = $productModel->countAll('categories');
+        $totalOrders = $productModel->countAll('orders');
+        $latestBooks = $productModel->getLatest(5); 
 
-    $latestBooks = $productModel->getLatest(5); 
+        $sqlRevenue = "SELECT SUM(total_price) as total FROM orders WHERE status != 'canceled'";
+        $stmt = connectDB()->query($sqlRevenue);
+        $revenueData = $stmt->fetch();
+        $totalRevenue = $revenueData['total'] ?? 0;
 
-    $sqlRevenue = "SELECT SUM(total_price) as total FROM orders WHERE status != 'canceled'";
-    $stmt = connectDB()->query($sqlRevenue);
-    $revenueData = $stmt->fetch();
-    $totalRevenue = $revenueData['total'] ?? 0;
-
-    $this->view('dashboard', [
-        'totalProducts'   => $totalBooks,
-        'totalCategories' => $totalCats,
-        'totalOrders'     => $totalOrders,
-        'totalRevenue'    => $totalRevenue,
-        'latestBooks'     => $latestBooks
-    ]);
-}
+        $this->view('dashboard', [
+            'totalProducts'   => $totalBooks,
+            'totalCategories' => $totalCats,
+            'totalOrders'     => $totalOrders,
+            'totalRevenue'    => $totalRevenue,
+            'latestBooks'     => $latestBooks
+        ]);
+    }
 }

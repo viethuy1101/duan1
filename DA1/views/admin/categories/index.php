@@ -22,15 +22,15 @@
 <body>
 
 <div class="container-fluid py-5 px-4">
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h3 class="fw-bold text-dark mb-1">Cấu hình Danh Mục</h3>
-            <p class="text-muted small mb-0">Quản lý và phân loại các đầu sách trong hệ thống</p>
-        </div>
-        <a href="?action=admin/category/create" class="btn btn-add text-white px-4 py-2 shadow-sm">
-            <i class="bi bi-plus-circle-fill me-2"></i>Thêm Danh Mục Mới
-        </a>
+   <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-1">Cấu hình Danh Mục</h2>
+        <p class="text-muted small">Quản lý và phân loại các đầu sách trong hệ thống</p>
     </div>
+    <a href="?action=admin/category/create" class="btn btn-success rounded-pill px-4">
+        <i class="bi bi-plus-circle me-2"></i> Thêm Danh Mục Mới
+    </a>
+</div>
 
     <div class="row">
         <div class="col-12">

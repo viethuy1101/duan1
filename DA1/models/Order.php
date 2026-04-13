@@ -20,7 +20,13 @@ class Order extends BaseModel {
         $stmt->execute([$id]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-   public function countTotalOrders() {
+
+    public function getAll() {
+        $sql = "SELECT * FROM {$this->table} ORDER BY id DESC";
+        return $this->pdo->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function countTotalOrders() {
         return $this->pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
     }
 
@@ -33,4 +39,10 @@ class Order extends BaseModel {
         return $revenue ? $revenue : 0;
     }
 
+    public function getAllOrdersForExport() {
+        $sql = "SELECT id, receiver_name, total_price, status, created_at FROM orders ORDER BY id DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
