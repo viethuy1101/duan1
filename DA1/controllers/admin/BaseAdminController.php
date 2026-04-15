@@ -13,4 +13,13 @@ class BaseAdminController {
             exit();
         }
     }
+
+    public function view($view, $data = []) {
+    extract($data);
+    
+    // Sử dụng đường dẫn tương đối từ file index.php gốc cho an toàn
+    include_once "views/admin/layout/header.php"; 
+    include_once "views/admin/" . $view . ".php"; 
+    include_once "views/admin/layout/footer.php";
+}
 }

@@ -4,13 +4,15 @@ require_once PATH_CONTROLLER . 'admin/DashboardController.php';
 require_once PATH_CONTROLLER . 'admin/ProductController.php';
 require_once PATH_CONTROLLER . 'admin/CategoryController.php';
 require_once PATH_CONTROLLER . 'admin/OrderController.php';
-require_once PATH_CONTROLLER . 'admin/UserController.php'; // Thêm dòng này
+require_once PATH_CONTROLLER . 'admin/UserController.php';
+require_once PATH_CONTROLLER . 'admin/ReviewController.php';
 
 use controllers\admin\OrderController;
 use controllers\admin\DashboardController;
 use controllers\admin\ProductController;
 use controllers\admin\CategoryController;
-use controllers\admin\UserController; // Thêm dòng này
+use controllers\admin\UserController;
+use controllers\admin\ReviewController;
 
 $action = isset($_GET['action']) ? trim($_GET['action']) : 'admin';
 
@@ -19,8 +21,10 @@ match ($action) {
     'admin/order'              => (new OrderController())->index(),
     'admin/order/detail'       => (new OrderController())->detail(),
     'admin/order/export'       => (new OrderController())->export(),
+    'admin/order/delete'        => (new OrderController())->delete(),
     'admin/user/create' => (new UserController())->create(),
     'admin/user/store'  => (new UserController())->store(),
+    
 
     // Quản lý User (Thêm cụm này vào)
     'admin/users'              => (new UserController())->index(),
@@ -42,6 +46,16 @@ match ($action) {
     'admin/category/edit'    => (new CategoryController())->edit(),
     'admin/category/update'  => (new CategoryController())->update(),
     'admin/category/delete'  => (new CategoryController())->delete(),
+
+    // --- QUẢN LÝ BIẾN THỂ SẢN PHẨM ---
+    'admin/product/variants' => (new ProductController())->variants($_GET['id']),
+    'admin/product/add-variant' => (new ProductController())->addVariant(),
+    'admin/product/delete-variant' => (new ProductController())->deleteVariant(),
+
+    // --- QUẢN LÝ ĐÁNH GIÁ (MỚI) ---
+    'admin/reviews'        => (new ReviewController())->index(),
+    'admin/review/toggle'  => (new ReviewController())->toggleStatus(), // Ẩn/hiện review
+    'admin/review/delete'  => (new ReviewController())->delete(),
 
     default => die("404 ADMIN: Không tìm thấy hành động $action"),
 };

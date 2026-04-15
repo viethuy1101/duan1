@@ -11,13 +11,14 @@ class Order extends BaseModel {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function getOrderDetails($id) {
-        $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
-                FROM order_details od               
-                JOIN books b ON od.book_id = b.id 
+    public function getOrderDetails($orderId) {
+        $sql = "SELECT od.*, b.title as product_name, b.image 
+                FROM order_details od 
+                JOIN books b ON od.product_id = b.id 
                 WHERE od.order_id = ?";
+                
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$id]);
+        $stmt->execute([$orderId]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
@@ -45,4 +46,29 @@ class Order extends BaseModel {
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function getStatsByDate($startDate, $endDate) {
+        $sql = "SELECT DATE(created_at) as order_date, 
+                       COUNT(id) as total_orders, 
+                       SUM(total_money) as daily_revenue 
+                FROM orders 
+                WHERE DATE(created_at) BETWEEN ? AND ? 
+                GROUP BY DATE(created_at) 
+                ORDER BY order_date DESC";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$startDate, $endDate]);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public function deleteOrder($id) {
+    // Xóa chi tiết đơn hàng trước để tránh lỗi khóa ngoại (Foreign Key)
+    $sqlDetails = "DELETE FROM order_details WHERE order_id = ?";
+    $stmtDetails = $this->pdo->prepare($sqlDetails);
+    $stmtDetails->execute([$id]);
+
+    // Sau đó mới xóa đơn hàng chính
+    $sqlOrder = "DELETE FROM orders WHERE id = ?";
+    $stmtOrder = $this->pdo->prepare($sqlOrder);
+    return $stmtOrder->execute([$id]);
+}
 }
