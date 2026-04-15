@@ -65,4 +65,22 @@ class OrderController extends BaseAdminController {
         fclose($output);
         exit;
     }
+    public function delete() {
+    $id = $_GET['id'] ?? null;
+    
+    if ($id) {
+
+        $result = $this->model->deleteOrder($id);
+        
+        if ($result) {
+            header("Location: ?action=admin/order&msg=Xóa thành công");
+            exit;
+        } else {
+            die("Lỗi: Không thể xóa đơn hàng #$id");
+        }
+    }
+    
+    header("Location: ?action=admin/order");
+    exit;
+}
 }

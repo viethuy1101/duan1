@@ -36,6 +36,9 @@
     <a href="?action=admin/users" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/users' ? 'active' : '' ?>">
         <i class="bi bi-people-fill"></i> Quản lý tài khoản
     </a>
+    <a href="?action=admin/reviews" class="<?= isset($_GET['action']) && $_GET['action'] == 'admin/reviews' ? 'active' : '' ?>">
+    <i class="bi bi-chat-left-text"></i> Quản lý đánh giá
+    </a>
 
     <hr class="opacity-25 mx-3">
     
