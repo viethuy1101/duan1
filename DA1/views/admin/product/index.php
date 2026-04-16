@@ -25,6 +25,11 @@
             </a>
         </div>
 
+        <?php if (isset($_GET['delete_error']) && $_GET['delete_error'] === 'order'): ?>
+            <div class="alert alert-warning rounded-4 mb-4">
+                Sản phẩm đang có trong đơn hàng nên không thể xóa. Nếu muốn, hãy vô hiệu hóa sản phẩm thay vì xóa.
+            </div>
+        <?php endif; ?>
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -49,9 +54,9 @@
                                         <div class="rounded-3 shadow-sm border overflow-hidden me-3" style="width: 50px; height: 70px;">
                                             <?php 
                                                 $imgName = !empty($p['image']) ? trim($p['image']) : 'no-image-book.png';
-                                                $imagePath = "assets/uploads/img/" . $imgName;
+                                                $imagePath = BASE_URL . "assets/uploads/img/" . $imgName;
                                             ?>
-                                            <img src="<?= $imagePath ?>" class="w-100 h-100" style="object-fit: cover;" onerror="this.src='assets/uploads/img/no-image-book.png';">
+                                            <img src="<?= $imagePath ?>" class="w-100 h-100" style="object-fit: cover;" onerror="this.src='<?= BASE_URL ?>assets/uploads/img/no-image-book.png';">
                                         </div>
                                         <div>
                                             <div class="fw-bold text-dark mb-0"><?= $p['title'] ?></div>

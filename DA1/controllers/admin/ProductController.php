@@ -101,27 +101,51 @@ class ProductController extends BaseAdminController {
         ]);
     }
 
-   public function update() {
-        $id = $_GET['id'];
+   public function update($id = null) {
+        $id = $id ?? $_GET['id'];
         $data = $_POST;
+        $product = $this->model->getById($id);
+        $db = connectDB();
+
+        // Cập nhật biến thể hiện có
+        if (isset($_POST['variant_id']) && is_array($_POST['variant_id'])) {
+            $variantPrices = $_POST['variant_price'] ?? [];
+            $variantStocks = $_POST['variant_stock'] ?? [];
+            $stmtVariant = $db->prepare("UPDATE product_variants SET price = ?, stock = ? WHERE id = ?");
+            foreach ($_POST['variant_id'] as $index => $variantId) {
+                $stmtVariant->execute([
+                    $variantPrices[$index] ?? 0,
+                    $variantStocks[$index] ?? 0,
+                    $variantId
+                ]);
+            }
+        }
+
+        // Thêm biến thể mới nếu form gửi
+        if (!empty(trim($_POST['new_variant_name'] ?? ''))) {
+            $this->model->addVariant(
+                $id,
+                trim($_POST['new_variant_name']),
+                $_POST['new_variant_price'] ?? 0,
+                $_POST['new_variant_stock'] ?? 0
+            );
+        }
 
         // Tự động tính lại kho tổng từ bảng biến thể để cập nhật vào bảng books
-        $db = connectDB();
         $vStmt = $db->prepare("SELECT SUM(stock) as total FROM product_variants WHERE product_id = ?");
         $vStmt->execute([$id]);
         $result = $vStmt->fetch();
-        
-        // Nếu có biến thể thì dùng tổng biến thể, nếu không có thì giữ nguyên stock cũ
-        $data['stock'] = ($result && $result['total'] !== null) ? $result['total'] : ($_POST['stock'] ?? 0);
+        $stockFromForm = $_POST['stock'] ?? $product['stock'] ?? 0;
+        $data['stock'] = ($result && $result['total'] !== null) ? $result['total'] : $stockFromForm;
 
-        if (isset($_FILES['image_upload']) && $_FILES['image_upload']['size'] > 0) {
-            $filename = time() . '_' . $_FILES['image_upload']['name']; 
+        if (isset($_FILES['image_upload']) && $_FILES['image_upload']['error'] === 0 && $_FILES['image_upload']['size'] > 0) {
+            $filename = time() . '_' . $_FILES['image_upload']['name'];
             move_uploaded_file($_FILES['image_upload']['tmp_name'], 'assets/uploads/img/' . $filename);
-            $data['image'] = $filename; 
+            $data['image'] = $filename;
         } else {
             $data['image'] = $_POST['current_image'];
         }
-        
+
         if ($this->model->update($id, $data)) {
             header("Location: ?action=admin/product");
             exit();
@@ -129,7 +153,20 @@ class ProductController extends BaseAdminController {
     }
 
     public function delete() {
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header("Location: ?action=admin/product");
+            exit();
+        }
+
+        if ($this->model->hasOrderReferences($id)) {
+            header("Location: ?action=admin/product&delete_error=order");
+            exit();
+        }
+
+        // Xóa biến thể trước để tránh xung đột FK nếu có
+        $this->model->deleteVariantsByProductId($id);
+
         if ($this->model->delete('books', $id)) {
             header("Location: ?action=admin/product");
             exit();

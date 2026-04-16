@@ -28,7 +28,7 @@
                     <th>Nội dung</th>
                     <th>Ngày</th>
                     <th>Trạng thái</th>
-                    <th>Thao tác</th>
+                    <th width="150px">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,15 +41,30 @@
                     <td><?= $review['comment'] ?></td>
                     <td><?= date('d/m/Y', strtotime($review['created_at'])) ?></td>
                     <td>
-                        <a href="?action=admin/review/toggle&id=<?= $review['id'] ?>" 
-                           class="badge rounded-pill text-decoration-none <?= $review['status'] == 'show' ? 'bg-success' : 'bg-secondary' ?>">
-                           <?= $review['status'] == 'show' ? 'Công khai' : 'Ẩn' ?>
-                        </a>
+                        <?php if ($review['status'] == 'show'): ?>
+                            <span class="badge rounded-pill bg-success">Công khai</span>
+                        <?php else: ?>
+                            <span class="badge rounded-pill bg-secondary">Đang ẩn</span>
+                        <?php endif; ?>
                     </td>
                     <td>
-                        <button onclick="confirmDelete(<?= $review['id'] ?>)" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                        <div class="d-flex gap-1">
+                            <?php if ($review['status'] == 'show'): ?>
+                                <a href="index.php?action=admin/review/toggle&id=<?= $review['id'] ?>&status=hidden" 
+                                   class="btn btn-outline-secondary btn-sm" title="Ẩn đánh giá">
+                                    <i class="bi bi-eye-slash"></i>
+                                </a>
+                            <?php else: ?>
+                                <a href="index.php?action=admin/review/toggle&id=<?= $review['id'] ?>&status=show" 
+                                   class="btn btn-outline-success btn-sm" title="Công khai đánh giá">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            <?php endif; ?>
+
+                            <button onclick="confirmDelete(<?= $review['id'] ?>)" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -66,8 +81,8 @@
     });
     
     function confirmDelete(id) {
-        if(confirm('M chắc chắn muốn xóa đánh giá này chứ?')) {
-            window.location.href = '?action=admin/review/delete&id=' + id;
+        if(confirm(' Bạn chắc chắn muốn xóa đánh giá này chứ?')) {
+            window.location.href = 'index.php?action=admin/review/delete&id=' + id;
         }
     }
 </script>

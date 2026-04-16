@@ -1,62 +1,35 @@
 <?php
 namespace controllers\admin;
 
-// Nạp file class cha - Hãy chắc chắn đường dẫn này đúng trong dự án của m
-require_once "controllers/admin/BaseAdminController.php";
+use models\BaseModel;
 
 class ReviewController extends BaseAdminController {
-    
-    public function __construct() {
-        // Kiểm tra xem class cha có tồn tại không để tránh lỗi
-        if (!class_exists('controllers\admin\BaseAdminController')) {
-            require_once "controllers/admin/BaseAdminController.php";
-        }
-        parent::__construct();
-    }
-
     public function index() {
-        // Kết nối database
-        $db = connectDB(); 
-      
-        // Query lấy dữ liệu (đã sửa tên bảng books và cột name cho m)
-        $sql = "SELECT r.*, u.name, b.title as product_name 
-                FROM reviews r 
-                JOIN users u ON r.user_id = u.id 
-                JOIN books b ON r.product_id = b.id 
+        $db = connectDB();
+        // JOIN để lấy tên người dùng và tên sách thật
+        $sql = "SELECT r.*, u.username, p.name as product_name 
+                FROM reviews r
+                JOIN users u ON r.user_id = u.id
+                JOIN products p ON r.product_id = p.id
                 ORDER BY r.created_at DESC";
         
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $listReviews = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        // Gọi hàm view để hiển thị giao diện
-        // Nếu vẫn lỗi "undefined method view", nghĩa là BaseAdminController của m không có hàm view()
+        $stmt = $db->query($sql);
+        $listReviews = $stmt->fetchAll();
+
+        // Gọi view (Dùng hàm view có sẵn của m)
         $this->view('reviews/index', [
             'listReviews' => $listReviews
         ]);
     }
 
     public function toggleStatus() {
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            $db = connectDB();
-            $sql = "UPDATE reviews SET status = IF(status = 'show', 'hide', 'show') WHERE id = ?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([$id]);
-        }
-        header("Location: ?action=admin/reviews");
-        exit;
+    $id = $_GET['id'] ?? null;
+    if ($id) {
+        $db = connectDB();
+        $sql = "UPDATE reviews SET status = IF(status = 'show', 'hide', 'show') WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
     }
-
-    public function delete() {
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            $db = connectDB();
-            $sql = "DELETE FROM reviews WHERE id = ?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute([$id]);
-        }
-        header("Location: ?action=admin/reviews");
-        exit;
-    }
+    header("Location: ?action=admin/reviews");
+}
 }

@@ -18,20 +18,6 @@
                     <textarea name="description" class="form-control" rows="3"><?= $category['description'] ?? '' ?></textarea>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">TRẠNG THÁI</label>
-                        <select name="status" class="form-select">
-                            <?php $currentStatus = $category['status'] ?? 1; ?>
-                            <option value="1" <?= $currentStatus == 1 ? 'selected' : '' ?>>Đang hoạt động</option>
-                            <option value="0" <?= $currentStatus == 0 ? 'selected' : '' ?>>Tạm ngưng</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">THỨ TỰ HIỂN THỊ</label>
-                        <input type="number" name="sort_order" class="form-control" value="<?= $category['sort_order'] ?? 0 ?>">
-                    </div>
-                </div>
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-submit w-100 mb-2">XÁC NHẬN THAY ĐỔI</button>

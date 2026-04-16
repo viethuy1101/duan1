@@ -65,7 +65,7 @@
             <h5 class="mb-0 fw-bold"><i class="bi bi-list-ul me-2"></i>Danh sách chi tiết</h5>
             <div class="input-group w-25">
                 <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Tìm đơn hàng...">
+                <input id="orderSearch" type="text" autocomplete="off" class="form-control bg-light border-0 small" placeholder="Tìm đơn hàng theo ID hoặc tên...">
             </div>
         </div>
         
@@ -93,42 +93,42 @@
                             <div class="d-flex align-items-center">
                                 <div class="avatar-sm rounded-circle me-3 d-flex align-items-center justify-content-center fw-bold shadow-sm" 
                                      style="width: 40px; height: 40px; background: linear-gradient(45deg, #0d6efd, #0dcaf0); color: #fff;">
-                                    <?= substr($o['customer_name'] ?? 'N', 0, 1) ?>
+                                    <?= substr($o['fullname'] ?? $o['customer_name'] ?? 'N', 0, 1) ?>
                                 </div>
                                 <div>
-                                    <span class="fw-bold d-block text-dark">User ID: <?= $o['user_id'] ?></span>
-                                    <small class="text-muted italic">Khách hàng hệ thống</small>
+                                    <span class="fw-bold d-block text-dark"><?= htmlspecialchars($o['fullname'] ?? $o['customer_name'] ?? 'Khách lẻ') ?></span>
+                                    <small class="text-muted italic">User ID: <?= $o['user_id'] ?? 'N/A' ?></small>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="badge bg-danger bg-opacity-10 text-danger fw-bold fs-6 px-3 py-2 rounded-3">
-                                <?= number_format($o['total_price']) ?>đ
+                                <?= number_format($o['total_money']) ?>đ
                             </div>
                         </td>
 <td>
     <?php
-    $statusRaw = $o['status'] ?? 'pending';
-    $statusText = 'Chờ xử lý'; // Mặc định
-    $badgeStyle = 'background: #fff3cd; color: #856404; border: 1px solid #ffeeba;'; // Vàng
+    $statusRaw = mb_strtolower(trim($o['status'] ?? 'pending'));
+    $statusMap = [
+        'pending'      => ['label' => 'Chờ xử lý', 'style' => 'background: #fff3cd; color: #856404; border: 1px solid #ffeeba;'],
+        'confirmed'    => ['label' => 'Đã xác nhận', 'style' => 'background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;'],
+        'shipping'     => ['label' => 'Đang giao', 'style' => 'background: #cce5ff; color: #004085; border: 1px solid #b8daff;'],
+        'completed'    => ['label' => 'Đã hoàn thành', 'style' => 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;'],
+        'cancelled'    => ['label' => 'Đã hủy', 'style' => 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'],
+        'delivered'    => ['label' => 'Đã hoàn thành', 'style' => 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;'],
+        'canceled'     => ['label' => 'Đã hủy', 'style' => 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'],
+        'chờ xử lý'     => ['label' => 'Chờ xử lý', 'style' => 'background: #fff3cd; color: #856404; border: 1px solid #ffeeba;'],
+        'đã xác nhận'   => ['label' => 'Đã xác nhận', 'style' => 'background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;'],
+        'đang giao'     => ['label' => 'Đang giao', 'style' => 'background: #cce5ff; color: #004085; border: 1px solid #b8daff;'],
+        'đã hoàn thành' => ['label' => 'Đã hoàn thành', 'style' => 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;'],
+        'đã hủy'       => ['label' => 'Đã hủy', 'style' => 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'],
+    ];
 
-    if ($statusRaw == 'confirmed') {
-        $statusText = 'Đã xác nhận';
-        $badgeStyle = 'background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;'; 
-    } elseif ($statusRaw == 'shipping') {
-        $statusText = 'Đang giao';
-        $badgeStyle = 'background: #cce5ff; color: #004085; border: 1px solid #b8daff;'; 
-    } elseif ($statusRaw == 'delivered' || $statusRaw == 'Completed' || $statusRaw == 'Hoàn thành') {
-        $statusText = 'Thành công';
-        $badgeStyle = 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;'; 
-    } elseif ($statusRaw == 'canceled' || $statusRaw == 'Đã hủy') {
-        $statusText = 'Đã hủy';
-        $badgeStyle = 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'; 
-    }
+    $statusInfo = $statusMap[$statusRaw] ?? $statusMap['pending'];
     ?>
 
-    <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="<?= $badgeStyle ?> font-size: 11px;">
-        <i class="bi bi-dot fs-5 align-middle"></i> <?= $statusText ?>
+    <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="<?= $statusInfo['style'] ?> font-size: 11px;">
+        <i class="bi bi-dot fs-5 align-middle"></i> <?= $statusInfo['label'] ?>
     </span>
 </td>
                         <td class="pe-4 text-center">
@@ -161,6 +161,26 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var input = document.getElementById('orderSearch');
+        var table = document.querySelector('table.table tbody');
+        if (!input || !table) return;
+
+        input.addEventListener('input', function() {
+            var query = input.value.trim().toLowerCase();
+            var rows = table.querySelectorAll('tr');
+
+            rows.forEach(function(row) {
+                var orderId = row.querySelector('td:first-child')?.textContent.toLowerCase() || '';
+                var customer = row.querySelector('td:nth-child(2) .fw-bold')?.textContent.toLowerCase() || '';
+                var visible = query === '' || orderId.indexOf(query) !== -1 || customer.indexOf(query) !== -1;
+                row.style.display = visible ? '' : 'none';
+            });
+        });
+    });
+</script>
 
 <style>
     body { font-family: 'Inter', sans-serif; }

@@ -41,11 +41,11 @@
                     <div class="card-body p-4">
                         <h6 class="text-uppercase fw-bold text-muted mb-3 small"><i class="fas fa-truck me-2 text-primary"></i>Thông tin nhận sách</h6>
                         <div class="ps-2">
-                            <h5 class="fw-bold mb-1 text-dark"><?= $order['receiver_name'] ?: '<span class="text-muted">Chưa cập nhật tên</span>' ?></h5>
-                            <p class="mb-1 text-dark"><i class="fas fa-phone-alt me-2 small text-muted"></i><?= $order['receiver_phone'] ?: 'Chưa cập nhật SĐT' ?></p>
-                            <p class="mb-2 text-dark"><i class="fas fa-home me-2 small text-muted"></i><?= $order['receiver_address'] ?: 'Chưa cập nhật địa chỉ' ?></p>
+                            <h5 class="fw-bold mb-1 text-dark"><?= $order['fullname'] ?: '<span class="text-muted">Chưa cập nhật tên</span>' ?></h5>
+                            <p class="mb-1 text-dark"><i class="fas fa-phone-alt me-2 small text-muted"></i><?= $order['phone'] ?: 'Chưa cập nhật SĐT' ?></p>
+                            <p class="mb-2 text-dark"><i class="fas fa-home me-2 small text-muted"></i><?= $order['address'] ?: 'Chưa cập nhật địa chỉ' ?></p>
                             <div class="p-3 bg-light rounded-3 small text-muted mt-2 border-start border-4 border-primary">
-                                <strong>Ghi chú đơn hàng:</strong> <?= $order['notes'] ?: 'Không có ghi chú từ khách.' ?>
+                                <strong>Ghi chú đơn hàng:</strong> <?= $order['note'] ?: 'Không có ghi chú từ khách.' ?>
                             </div>
                         </div>
                     </div>
@@ -64,9 +64,29 @@
                         </div>
                         <div>
                             <p class="text-muted small mb-1">Tình trạng xử lý:</p>
+                            <form action="?action=admin/order/update-status" method="POST" class="d-flex gap-2 align-items-center">
+                                <input type="hidden" name="id" value="<?= htmlspecialchars($order['id']) ?>">
+                                <select name="status" class="form-select form-select-sm w-auto">
+                                    <?php
+                                        $statusOptions = [
+                                            'pending'   => 'Chờ xử lý',
+                                            'confirmed' => 'Đã xác nhận',
+                                            'shipping'  => 'Đang giao hàng',
+                                            'completed' => 'Hoàn thành',
+                                            'cancelled' => 'Đã hủy',
+                                        ];
+                                        $currentStatus = strtolower($order['status'] ?? 'pending');
+                                        foreach ($statusOptions as $value => $label) {
+                                            $selected = $currentStatus === $value ? 'selected' : '';
+                                            echo "<option value=\"$value\" $selected>$label</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary rounded-pill">Cập nhật</button>
+                            </form>
+                            <div class="mt-3">
                             <?php
-                            $status = $order['status'] ?? 'pending';
-                            switch (strtolower($status)) {
+                            switch ($currentStatus) {
                                 case 'pending':
                                     echo '<span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-clock-history me-1"></i> Chờ xử lý</span>';
                                     break;
@@ -86,6 +106,7 @@
                                     echo '<span class="badge bg-secondary text-white px-3 py-2 rounded-pill">Không xác định</span>';
                             }
                             ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,9 +133,9 @@
                         <?php foreach ($order_details as $item): ?>
                         <tr>
                             <td class="ps-4">
-                                <img src="assets/uploads/img/<?= trim($item['product_image']) ?>" 
+                                <img src="<?= BASE_URL ?>assets/uploads/img/<?= htmlspecialchars($item['image'] ?? 'no-image-book.png') ?>" 
                                     width="45" height="60" class="rounded img-book" 
-                                    onerror="this.src='https://ui-avatars.com/api/?name=Book&background=random'">
+                                    onerror="this.src='<?= BASE_URL ?>assets/uploads/img/no-image-book.png'">
                             </td>
                             <td>
                                 <div class="fw-bold text-dark"><?= $item['product_name'] ?></div>
@@ -129,24 +150,24 @@
                     <tfoot class="border-top-2">
                         <tr>
                             <td colspan="3" class="border-0"></td>
-                            <td class="text-end py-2 text-muted">Tổng tiền sách:</td>
-                            <td class="text-end py-2 pe-4 fw-bold"><?= number_format($order['total_price']) ?>đ</td>
+                            <td class="text-end py-2 text-muted">Tổng tiền sách và vận chuyển:</td>
+                            <td class="text-end py-2 pe-4 fw-bold"><?= number_format($order['total_money']) ?>đ</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="border-0"></td>
                             <td class="text-end py-2 text-muted">Mã giảm giá (Coupon):</td>
                             <td class="text-end py-2 pe-4 text-success fw-bold">- 20,000đ</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td colspan="3" class="border-0"></td>
                             <td class="text-end py-2 text-muted">Phí giao hàng:</td>
                             <td class="text-end py-2 pe-4 text-primary fw-bold">MIỄN PHÍ</td>
-                        </tr>
+                        </tr> -->
                         <tr class="bg-dark-blue text-white">
                             <td colspan="3" class="border-0"></td>
                             <td class="text-end py-3 fw-bold text-uppercase">Thực thu (Tổng thanh toán):</td>
                             <td class="text-end py-3 pe-4 fw-bold fs-4 text-warning">
-                                <?= number_format($order['total_price'] - 20000) ?>đ
+                                <?= number_format($order['total_money'] - 20000) ?>đ
                             </td>
                         </tr>
                     </tfoot>

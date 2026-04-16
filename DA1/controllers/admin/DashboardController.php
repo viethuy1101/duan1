@@ -20,7 +20,7 @@ class DashboardController extends BaseAdminController {
         $startDate = $_GET['start_date'] ?? date('Y-m-d', strtotime('-30 days'));
         $endDate = $_GET['end_date'] ?? date('Y-m-d');
 
-        $sql = "SELECT SUM(total_price) as revenue, COUNT(id) as orders 
+        $sql = "SELECT SUM(total_money) as revenue, COUNT(id) as orders 
                 FROM orders 
                 WHERE DATE(created_at) BETWEEN ? AND ?";
         $stmt = $db->prepare($sql);

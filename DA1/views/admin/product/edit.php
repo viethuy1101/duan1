@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Chỉnh sửa sản phẩm - Book Verse</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body { background-color: #f0f2f5; font-family: 'Inter', sans-serif; color: #1e293b; }
+<style>
         .form-label { font-weight: 600; color: #64748b; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 8px; }
         .card-custom { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; background: #fff; }
         .form-control, .form-select { border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; transition: 0.2s; }
@@ -29,11 +21,10 @@
         /* Badge biến thể */
         .badge-variant-count { background: #eff6ff; color: #3b82f6; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
     </style>
-</head>
-<body>
 
-<form action="?action=admin/product/update" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="<?= $product['id'] ?>"> <div class="container-fluid py-4 px-4">
+<form action="?action=admin/product/update&id=<?= $product['id'] ?>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?= $product['id'] ?>"> 
+    <div class="container-fluid py-4 px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <nav aria-label="breadcrumb">
@@ -71,7 +62,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Giá gốc (VNĐ)</label>
-                            <input type="number" name="base_price" class="form-control" value="<?= $product['price'] ?>">
+                            <input type="number" name="price" class="form-control" value="<?= $product['price'] ?>" required>
                         </div>
                     </div>
                     <div class="mb-0">
@@ -99,16 +90,17 @@
                                 <?php foreach ($variants as $v): ?>
                                 <tr class="variant-row">
                                     <td class="ps-4">
-                                        <input type="text" class="form-control variant-input" value="<?= $v['variant_name'] ?>" readonly>
+                                        <input type="hidden" name="variant_id[]" value="<?= $v['id'] ?>">
+                                        <input type="text" name="variant_name[]" class="form-control variant-input" value="<?= $v['variant_name'] ?>" readonly>
                                     </td>
                                     <td class="text-center" style="width: 180px;">
                                         <div class="input-group input-group-sm">
-                                            <input type="number" class="form-control text-center fw-bold text-danger" value="<?= $v['price'] ?>">
+                                            <input type="number" name="variant_price[]" class="form-control text-center fw-bold text-danger" value="<?= $v['price'] ?>">
                                             <span class="input-group-text bg-white border-start-0 text-muted">đ</span>
                                         </div>
                                     </td>
                                     <td class="text-center" style="width: 120px;">
-                                        <input type="number" class="form-control form-control-sm text-center" value="<?= $v['stock'] ?>">
+                                        <input type="number" name="variant_stock[]" class="form-control form-control-sm text-center" value="<?= $v['stock'] ?>">
                                     </td>
                                     <td class="text-end pe-4">
                                         <a href="?action=admin/product/delete-variant&id=<?= $v['id'] ?>" class="text-danger opacity-50 hover-opacity-100" onclick="return confirm('Xóa biến thể này?')">
@@ -132,7 +124,7 @@
                                 <input type="number" name="new_variant_stock" class="form-control form-control-sm" placeholder="Kho">
                             </div>
                             <div class="col-md-2 text-end">
-                                <button type="button" class="btn btn-dark btn-sm w-100 rounded-pill">Thêm</button>
+                                <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">Thêm</button>
                             </div>
                         </div>
                     </div>
@@ -143,8 +135,9 @@
                 <div class="card card-custom p-4">
                     <label class="form-label d-block mb-3 text-center">Ảnh đại diện</label>
                     <div class="img-preview-container">
-                        <img src="assets/uploads/img/<?= $product['image'] ?>" class="img-preview" id="preview">
-                        <input type="file" name="image" class="form-control mt-3" onchange="previewImage(this)">
+                        <img src="<?= BASE_URL ?>assets/uploads/img/<?= htmlspecialchars($product['image'] ?? 'no-image-book.png') ?>" class="img-preview" id="preview" onerror="this.src='<?= BASE_URL ?>assets/uploads/img/no-image-book.png'">
+                        <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image']) ?>">
+                        <input type="file" name="image_upload" class="form-control mt-3" onchange="previewImage(this)">
                         <p class="text-muted small mt-2 m-0">Click để thay đổi hình ảnh (JPG, PNG)</p>
                     </div>
                 </div>
@@ -153,7 +146,7 @@
                     <h5 class="fw-bold mb-3">Kho hàng tổng</h5>
                     <div class="mb-3">
                         <label class="form-label text-dark">Tổng tồn kho</label>
-                        <input type="number" name="total_stock" class="form-control fw-bold" value="<?= $product['total_stock'] ?? 0 ?>">
+                        <input type="number" name="stock" class="form-control fw-bold" value="<?= $product['stock'] ?? 0 ?>" readonly>
                         <small class="text-muted mt-2 d-block">Hệ thống sẽ tự động cập nhật khi m sửa biến thể.</small>
                     </div>
                 </div>
@@ -173,6 +166,3 @@
         }
     }
 </script>
-
-</body>
-</html>
