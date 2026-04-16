@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Giá gốc (VNĐ)</label>
-                            <input type="number" name="base_price" class="form-control" value="<?= $product['price'] ?>">
+                            <input type="number" name="price" class="form-control" value="<?= $product['price'] ?>" required>
                         </div>
                     </div>
                     <div class="mb-0">
@@ -124,7 +124,7 @@
                                 <input type="number" name="new_variant_stock" class="form-control form-control-sm" placeholder="Kho">
                             </div>
                             <div class="col-md-2 text-end">
-                                <button type="button" class="btn btn-dark btn-sm w-100 rounded-pill">Thêm</button>
+                                <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">Thêm</button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                 <div class="card card-custom p-4">
                     <label class="form-label d-block mb-3 text-center">Ảnh đại diện</label>
                     <div class="img-preview-container">
-                        <img src="assets/uploads/img/<?= $product['image'] ?>" class="img-preview" id="preview">
+                        <img src="<?= BASE_URL ?>assets/uploads/img/<?= htmlspecialchars($product['image'] ?? 'no-image-book.png') ?>" class="img-preview" id="preview" onerror="this.src='<?= BASE_URL ?>assets/uploads/img/no-image-book.png'">
                         <input type="hidden" name="current_image" value="<?= htmlspecialchars($product['image']) ?>">
                         <input type="file" name="image_upload" class="form-control mt-3" onchange="previewImage(this)">
                         <p class="text-muted small mt-2 m-0">Click để thay đổi hình ảnh (JPG, PNG)</p>
@@ -146,7 +146,7 @@
                     <h5 class="fw-bold mb-3">Kho hàng tổng</h5>
                     <div class="mb-3">
                         <label class="form-label text-dark">Tổng tồn kho</label>
-                        <input type="number" name="total_stock" class="form-control fw-bold" value="<?= $product['total_stock'] ?? 0 ?>">
+                        <input type="number" name="stock" class="form-control fw-bold" value="<?= $product['stock'] ?? 0 ?>" readonly>
                         <small class="text-muted mt-2 d-block">Hệ thống sẽ tự động cập nhật khi m sửa biến thể.</small>
                     </div>
                 </div>

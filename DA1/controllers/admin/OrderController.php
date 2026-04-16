@@ -24,11 +24,12 @@ class OrderController extends BaseAdminController {
     }
 
     public function index() {
-        $orders = $this->model->getAll(); 
+        $search = $_GET['search'] ?? null;
+        $orders = $this->model->getAll($search);
         $totalOrders = $this->model->countTotalOrders();
         $pendingOrders = $this->model->countPendingOrders();
         $totalRevenue = $this->model->sumTotalRevenue();
-        return $this->view('admin/order/index', compact('orders', 'totalOrders', 'pendingOrders', 'totalRevenue'));
+        return $this->view('admin/order/index', compact('orders', 'totalOrders', 'pendingOrders', 'totalRevenue', 'search'));
     }
 
     public function detail() {
@@ -65,6 +66,26 @@ class OrderController extends BaseAdminController {
         fclose($output);
         exit;
     }
+    public function updateStatus() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
+            $status = $_POST['status'] ?? null;
+
+            if ($id && $status) {
+                $allowedStatuses = ['pending', 'confirmed', 'shipping', 'completed', 'cancelled'];
+                if (in_array($status, $allowedStatuses, true)) {
+                    $this->model->updateStatus($id, $status);
+                }
+            }
+
+            header("Location: ?action=admin/order/detail&id=" . urlencode($id));
+            exit;
+        }
+
+        header("Location: ?action=admin/order");
+        exit;
+    }
+
     public function delete() {
     $id = $_GET['id'] ?? null;
     

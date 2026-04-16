@@ -19,13 +19,11 @@ class Category extends BaseModel
     }
    public function update($id, $data)
     {
-        $sql = "UPDATE {$this->table} SET name = ?, description = ?, status = ?, sort_order = ? WHERE id = ?";
+        $sql = "UPDATE {$this->table} SET name = ?, description = ? WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             $data['name'], 
-            $data['description'], 
-            $data['status'], 
-            $data['sort_order'], 
+            $data['description'] ?? null,
             $id
         ]);
     }

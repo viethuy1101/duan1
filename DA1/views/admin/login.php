@@ -90,7 +90,7 @@
             <p class="text-gray-500 text-sm font-medium">Hệ thống quản trị nội bộ cao cấp</p>
         </div>
 
-        <form action="?action=check-login" method="POST" class="space-y-8">
+        <form action="?action=admin/check-login" method="POST" class="space-y-8">
             
             <div class="relative group">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">Email Quản Trị</label>

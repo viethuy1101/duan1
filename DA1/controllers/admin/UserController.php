@@ -31,14 +31,25 @@ class UserController extends BaseAdminController {
     public function delete() {
     $id = $_GET['id'] ?? null;
     if ($id) {
-        (new \models\User())->delete($id);
+        try {
+            (new \models\User())->delete($id);
+        } catch (\Exception $e) {
+            header("Location: ?action=admin/users&error=cannot_delete");
+            exit();
+        }
     }
     header("Location: ?action=admin/users");
-    }
-    public function create() {
-    include_once "views/admin/users/create.php";
+    exit();
 }
 
+public function create() {
+    $viewPath = "views/admin/users/create.php";
+    if (file_exists($viewPath)) {
+        include_once $viewPath;
+    } else {
+        die("404: Not Found $viewPath");
+    }
+}
 public function store() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = [

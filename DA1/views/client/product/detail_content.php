@@ -6,7 +6,6 @@
   <title><?= $product['title'] ?> - Chi tiết sản phẩm</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    <style>
 /* --- RESET & CƠ BẢN --- */
 * {
     box-sizing: border-box;
@@ -227,6 +226,87 @@ body {
     }
     .btn { width: 100%; }
 }
+
+.product-reviews-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #ececec;
+}
+.product-reviews-section h3 {
+    margin-bottom: 18px;
+    font-size: 1.2rem;
+    color: #222;
+}
+.review-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+.average-rating {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ee4d2d;
+}
+.rating-out-of {
+    font-size: 1rem;
+    color: #777;
+}
+.rating-stars {
+    display: flex;
+    gap: 4px;
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+.rating-count {
+    color: #555;
+    font-size: 0.95rem;
+}
+.no-reviews {
+    color: #666;
+    padding: 18px 0;
+}
+.review-list {
+    display: grid;
+    gap: 18px;
+}
+.review-item {
+    padding: 18px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+}
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 12px;
+}
+.review-author {
+    font-weight: 700;
+    color: #222;
+}
+.review-rating {
+    display: flex;
+    gap: 4px;
+    color: #ffc107;
+}
+.review-comment {
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+.review-date {
+    font-size: 0.85rem;
+    color: #888;
+}
 </style>
   </style>
 </head>
@@ -237,7 +317,7 @@ body {
       <!-- Product Image Section -->
       <div class="product-image-section">
         <div class="product-image-wrapper">
-          <img src="<?= $product['image'] ?>" alt="<?= $product['title'] ?>" class="product-image">
+          <img src="<?= BASE_ASSETS_UPLOADS . 'img/' . htmlspecialchars($product['image'] ?? 'no-image-book.png') ?>" alt="<?= htmlspecialchars($product['title']) ?>" class="product-image" onerror="this.src='<?= BASE_ASSETS_UPLOADS . 'img/no-image-book.png' ?>'">
           <div class="image-badge">Có sẵn</div>
         </div>
         <div class="product-features">
@@ -260,15 +340,32 @@ body {
       <div class="product-info-section">
         <h1 class="product-title"><?= $product['title'] ?></h1>
         
+        <?php
+          $reviewCount = count($reviews ?? []);
+          $averageRating = 0;
+          if ($reviewCount > 0) {
+              $total = 0;
+              foreach ($reviews as $review) {
+                  $total += (int) $review['rating'];
+              }
+              $averageRating = round($total / $reviewCount, 1);
+          }
+          $filledStars = floor($averageRating);
+          $hasHalfStar = ($averageRating - $filledStars) >= 0.5;
+        ?>
         <div class="product-rating">
           <div class="stars">
-            <i class="fas fa-star filled"></i>
-            <i class="fas fa-star filled"></i>
-            <i class="fas fa-star filled"></i>
-            <i class="fas fa-star filled"></i>
-            <i class="fas fa-star half"></i>
+            <?php for ($i = 1; $i <= 5; $i++): ?>
+              <?php if ($i <= $filledStars): ?>
+                <i class="fas fa-star filled"></i>
+              <?php elseif ($i === $filledStars + 1 && $hasHalfStar): ?>
+                <i class="fas fa-star-half-alt filled"></i>
+              <?php else: ?>
+                <i class="far fa-star"></i>
+              <?php endif; ?>
+            <?php endfor; ?>
           </div>
-          <span class="rating-count">chưa có đánh giá</span>
+          <span class="rating-count"><?= $reviewCount > 0 ? ($averageRating . '/5 từ ' . $reviewCount . ' đánh giá') : 'Chưa có đánh giá' ?></span>
         </div>
 
         <div class="product-meta">
@@ -325,6 +422,70 @@ body {
         <div class="product-description">
           <h3>Mô tả sản phẩm</h3>
           <p>Đây là một sản phẩm chất lượng cao được chọn lọc kỹ lưỡng. Sản phẩm đã được kiểm định và đảm bảo chất lượng.</p>
+        </div>
+
+        <?php
+            $reviewCount = count($reviews ?? []);
+            $averageRating = 0;
+            if ($reviewCount > 0) {
+                $total = 0;
+                foreach ($reviews as $review) {
+                    $total += (int) $review['rating'];
+                }
+                $averageRating = round($total / $reviewCount, 1);
+            }
+
+            $filledStars = floor($averageRating);
+            $hasHalfStar = ($averageRating - $filledStars) >= 0.5;
+        ?>
+
+        <div class="product-reviews-section">
+          <h3>Đánh giá từ khách hàng (<?= $reviewCount ?>)</h3>
+          <div class="review-summary mb-4">
+            <div class="average-rating">
+              <span class="rating-value"><?= $averageRating ?: '0' ?></span>
+              <span class="rating-out-of">/5</span>
+            </div>
+            <div class="rating-stars">
+              <?php for ($i = 1; $i <= 5; $i++): ?>
+                <?php if ($i <= $filledStars): ?>
+                  <i class="fas fa-star"></i>
+                <?php elseif ($i === $filledStars + 1 && $hasHalfStar): ?>
+                  <i class="fas fa-star-half-alt"></i>
+                <?php else: ?>
+                  <i class="far fa-star"></i>
+                <?php endif; ?>
+              <?php endfor; ?>
+            </div>
+            <div class="rating-count">
+              <?= $reviewCount ?> đánh giá
+            </div>
+          </div>
+
+          <?php if ($reviewCount === 0): ?>
+            <p class="no-reviews">Chưa có đánh giá nào cho sản phẩm này.</p>
+          <?php else: ?>
+            <div class="review-list">
+              <?php foreach ($reviews as $review): ?>
+                <div class="review-item">
+                  <div class="review-header">
+                    <div class="review-author"><?= htmlspecialchars($review['user_name']) ?></div>
+                    <div class="review-rating">
+                      <?php for ($star = 1; $star <= 5; $star++): ?>
+                        <?php if ($star <= (int) $review['rating']): ?>
+                          <i class="fas fa-star"></i>
+                        <?php else: ?>
+                          <i class="far fa-star"></i>
+                        <?php endif; ?>
+                      <?php endfor; ?>
+                    </div>
+                  </div>
+                  <div class="review-comment"><?= nl2br(htmlspecialchars($review['comment'] ?: '')) ?></div>
+                  <div class="review-date"><?= date('d/m/Y', strtotime($review['created_at'])) ?></div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
         </div>
 
       </div>

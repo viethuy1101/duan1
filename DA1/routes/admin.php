@@ -1,5 +1,4 @@
 <?php
-// 1. Nạp thêm file UserController ở đây
 require_once PATH_CONTROLLER . 'admin/DashboardController.php';
 require_once PATH_CONTROLLER . 'admin/ProductController.php';
 require_once PATH_CONTROLLER . 'admin/CategoryController.php';
@@ -18,18 +17,19 @@ $action = isset($_GET['action']) ? trim($_GET['action']) : 'admin';
 
 match ($action) {
     'admin', 'admin/dashboard' => (new DashboardController())->index(),
-    'admin/order'              => (new OrderController())->index(),
-    'admin/order/detail'       => (new OrderController())->detail(),
-    'admin/order/export'       => (new OrderController())->export(),
+    'admin/order'               => (new OrderController())->index(),
+    'admin/order/detail'        => (new OrderController())->detail(),
+    'admin/order/update-status' => (new OrderController())->updateStatus(),
     'admin/order/delete'        => (new OrderController())->delete(),
-    'admin/user/create' => (new UserController())->create(),
-    'admin/user/store'  => (new UserController())->store(),
-    
 
-    // Quản lý User (Thêm cụm này vào)
-    'admin/users'              => (new UserController())->index(),
-    'admin/user-role'          => (new UserController())->changeRole(),
-    'admin/user-delete'        => (new UserController())->delete(),
+    // Quản lý User
+    'admin/users'             => (new UserController())->index(),
+    'admin/user/create'       => (new UserController())->create(),
+    'admin/user/store'        => (new UserController())->store(),
+    'admin/user-role'         => (new UserController())->changeRole(), 
+    'admin/user-unrole'       => (new UserController())->changeRole(), 
+    'admin/user-delete'       => (new UserController())->delete(),
+    'admin/user-delete-role'  => (new UserController())->delete(), 
 
     // CRUD Product
     'admin/product'         => (new ProductController())->index(),
@@ -39,7 +39,7 @@ match ($action) {
     'admin/product/update'  => (new ProductController())->update($_GET['id'] ?? $_POST['id'] ?? null),
     'admin/product/delete'  => (new ProductController())->delete($_GET['id'] ?? null),
     
-    // CRUD Category
+    // CRUD Category - ĐÃ TRẢ LẠI NGUYÊN BẢN THEO YÊU CẦU CỦA M
     'admin/category'         => (new CategoryController())->index(),
     'admin/category/create'  => (new CategoryController())->create(),
     'admin/category/store'   => (new CategoryController())->store(),
@@ -47,15 +47,11 @@ match ($action) {
     'admin/category/update'  => (new CategoryController())->update(),
     'admin/category/delete'  => (new CategoryController())->delete(),
 
-    // --- QUẢN LÝ BIẾN THỂ SẢN PHẨM ---
+    // Biến thể & Đánh giá
     'admin/product/variants' => (new ProductController())->variants($_GET['id']),
-    'admin/product/add-variant' => (new ProductController())->addVariant(),
-    'admin/product/delete-variant' => (new ProductController())->deleteVariant(),
-
-    // --- QUẢN LÝ ĐÁNH GIÁ (MỚI) ---
-    'admin/reviews'        => (new ReviewController())->index(),
-    'admin/review/toggle'  => (new ReviewController())->toggleStatus(), // Ẩn/hiện review
-    'admin/review/delete'  => (new ReviewController())->delete(),
+    'admin/reviews'          => (new ReviewController())->index(),
+    'admin/review/delete'    => (new ReviewController())->delete(),
+    'admin/review/toggle'    => (new ReviewController())->toggleStatus(),
 
     default => die("404 ADMIN: Không tìm thấy hành động $action"),
 };

@@ -4,6 +4,7 @@ namespace controllers\client;
 use Product;
 
 require_once PATH_MODEL . 'Product.php';
+require_once PATH_MODEL . 'Order.php';
 
 class ProductController
 {
@@ -17,10 +18,11 @@ class ProductController
     {
         $id = $_GET['id'] ?? 0;
         $product = (new Product())->getById($id);
-        
+
+        $reviewModel = new \models\Order();
+        $reviews = $reviewModel->getReviewsByProductId($id);
 
         require_once PATH_VIEW . 'client/product/detail.php';
-        
     }
     private function resizeImage($file, $width, $height)
     {

@@ -27,24 +27,52 @@ class CategoryController extends BaseAdminController
     }
 
     public function store() {
+        $name = trim($_POST['name'] ?? '');
+        if ($name === '') {
+            $_SESSION['error'] = 'Tên danh mục không được để trống.';
+            header("Location: ?action=admin/category/create");
+            exit();
+        }
+
         $model = new Category();
-        $model->insert(['name' => $_POST['name']]);
+        $model->insert(['name' => $name]);
         $_SESSION['message'] = 'Thêm danh mục thành công!';
         header("Location: ?action=admin/category");
         exit();
     }
 
-    public function edit() {
-        $model = new Category();
-        $category = $model->find($_GET['id']);
-        $this->renderView('categories/edit', compact('category'));
+   public function edit() {
+    // 1. Lấy ID từ URL, nếu không có ID thì không thể sửa
+    $id = $_GET['id'] ?? null;
+    
+    if (!$id) {
+        die("Lỗi: Không tìm thấy ID danh mục để sửa.");
     }
+
+    // 2. Khởi tạo Model (Đảm bảo Class Category đã được use hoặc require)
+    $model = new Category();
+
+    // 3. Tìm dữ liệu danh mục theo ID
+    $category = $model->find($id);
+
+    // 4. Kiểm tra nếu không tìm thấy dữ liệu trong DB
+    if (!$category) {
+        die("Lỗi: Danh mục với ID $id không tồn tại.");
+    }
+
+    // 5. Render View (M phải kiểm tra xem thư mục là 'categories' hay 'category')
+    // Nếu trong thư mục views/admin của m là 'category' thì đổi lại nhé
+    $this->renderView('categories/edit', compact('category'));
+}
 
     public function update() {
         $model = new Category();
         $id = $_GET['id'] ?? null;
         if ($id) {
-            $model->update($id, ['name' => $_POST['name']]);
+            $model->update($id, [
+                'name' => $_POST['name'],
+                'description' => $_POST['description'] ?? null
+            ]);
             $_SESSION['message'] = 'Cập nhật danh mục thành công!';
         }
         header("Location: ?action=admin/category");

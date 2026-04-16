@@ -110,13 +110,13 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded-2 bg-light p-1 me-3" style="width: 45px; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #eee;">
-                                            <?php $image_path = "assets/uploads/img/" . $book['image']; ?>
-                                            <?php if(!empty($book['image']) && file_exists($image_path)): ?>
-                                                <img src="<?= $image_path ?>" style="width: 100%; height: 100%; object-fit: cover;" class="rounded">
-                                            <?php else: ?>
-                                                <span style="font-size: 20px;">📚</span>
-                                            <?php endif; ?>
+                                        <div class="rounded-3 shadow-sm border overflow-hidden me-3" style="width: 45px; height: 60px;">
+                                            <?php 
+                                                $imagePath = !empty($book['image']) ? BASE_URL . "assets/uploads/img/" . htmlspecialchars($book['image']) : BASE_URL . "assets/uploads/img/no-image-book.png";
+                                            ?>
+                                            <img src="<?= $imagePath ?>" 
+                                                 style="width: 100%; height: 100%; object-fit: cover;" 
+                                                 onerror="this.src='<?= BASE_URL ?>assets/uploads/img/no-image-book.png'">
                                         </div>
                                         <div class="fw-bold text-dark"><?= $book['title'] ?></div>
                                     </div>

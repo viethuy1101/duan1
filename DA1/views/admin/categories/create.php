@@ -23,7 +23,13 @@
                 </div>
 
                 <div class="card-body p-4 p-md-5 bg-white">
-                    <form action="<?= BASE_URL ?>admin/category/store" method="POST">
+                    <?php if (!empty($_SESSION['error'])): ?>
+                        <div class="alert alert-danger mb-4">
+                            <?= htmlspecialchars($_SESSION['error']) ?>
+                        </div>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
+                    <form action="<?= BASE_URL ?>?action=admin/category/store" method="POST">
                         <div class="mb-4">
                             <label class="form-label fw-bold label-custom text-uppercase">Tên danh mục sách</label>
                             <input type="text" name="name" class="form-control" placeholder="Ví dụ: Công nghệ thông tin, Văn học..." required>

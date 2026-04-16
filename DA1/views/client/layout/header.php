@@ -69,7 +69,7 @@
                <div class="dropdown">
     <?php if (isset($_SESSION['user'])): ?>
         <a class="btn btn-outline-dark rounded-pill px-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-check"></i> Chào, <?= $_SESSION['user']['name'] ?>
+            <i class="bi bi-person-check"></i> Chào, <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Khách') ?>
         </a>
         <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
             <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=profile">Trang cá nhân</a></li>
@@ -96,9 +96,9 @@
             </div>
         </div>
     </div>
-    <a href="?action=admin">Vào Admin</a>
+    <a href="<?= BASE_URL ?>?action=admin/login" class="btn btn-sm btn-primary rounded-pill">Vào Admin</a>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html>     

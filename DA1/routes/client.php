@@ -18,6 +18,7 @@ match ($action) {
     'post-register' => (new AuthController())->postRegister(),
     'logout' => (new AuthController())->logout(),
     'profile' => (new AuthController())->profile(),
+    'post-review' => (new AuthController())->postReview(),
     'order-detail' => (new AuthController())->orderDetail(),
 
     // CART

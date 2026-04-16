@@ -67,30 +67,24 @@ class AuthController
         }
     }
     public function logout() {
-    // 1. Xóa toàn bộ dữ liệu trong session liên quan đến user
     if (isset($_SESSION['user'])) {
         unset($_SESSION['user']);
     }
 
-    // 2. (Tùy chọn) Hủy toàn bộ session nếu muốn an toàn tuyệt đối
-    // session_destroy();
-
-    // 3. Chuyển hướng về trang chủ hoặc trang đăng nhập
     header("Location: " . BASE_URL);
     exit();
 }
 public function profile()
     {
-        // 1. Kiểm tra đăng nhập
+
         if (!isset($_SESSION['user'])) {
             header("Location: " . BASE_URL . "?action=login");
             exit();
         }
 
         $userId = $_SESSION['user']['id'];
-        $orderModel = new Order(); // Khởi tạo model đơn hàng
+        $orderModel = new Order(); 
 
-        // 2. Xử lý cập nhật thông tin cá nhân
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $dataUpdate = [
                 'name'    => $_POST['name'],
@@ -100,14 +94,12 @@ public function profile()
             ];
             $this->userModel->updateProfile($userId, $dataUpdate);
             
-            // Cập nhật lại session để hiển thị tên mới ngay lập tức
             $_SESSION['user']['name'] = $_POST['name'];
             
             echo "<script>alert('Cập nhật thành công!'); window.location.href='?action=profile';</script>";
             exit();
         }
 
-        // 3. Lấy thông tin user và danh sách đơn hàng
         $user = $this->userModel->getUserById($userId);
         $orders = $orderModel->getOrdersByUserId($userId);
 
@@ -142,5 +134,66 @@ public function orderDetail() {
         'details' => $details,
         'expectedDate' => $expectedDate
     ]);
+}
+
+public function postReview()
+{
+    // 1. Kiểm tra đăng nhập
+    if (!isset($_SESSION['user'])) {
+        header("Location: " . BASE_URL . "?action=login");
+        exit();
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userId = $_SESSION['user']['id'];
+        $productId = $_POST['product_id'] ?? null;
+        $orderId = $_POST['order_id'] ?? null;
+        $rating = $_POST['rating'] ?? null;
+        $comment = $_POST['comment'] ?? '';
+
+        // 2. Validate dữ liệu
+        if (!$productId || !$orderId || !$rating) {
+            echo "<script>alert('Thiếu thông tin đánh giá!'); window.history.back();</script>";
+            exit();
+        }
+
+        // 3. Kiểm tra trạng thái đơn hàng và quyền đánh giá
+        $orderModel = new Order();
+        $order = $orderModel->find($orderId);
+        if (!$order || $order['user_id'] != $userId) {
+            echo "<script>alert('Không tìm thấy đơn hàng hoặc bạn không có quyền đánh giá.'); window.history.back();</script>";
+            exit();
+        }
+
+        $allowedReviewStatus = ['completed', 'delivered', 'đã hoàn thành'];
+        $currentStatus = mb_strtolower(trim($order['status']));
+        if (!in_array($currentStatus, $allowedReviewStatus, true)) {
+            echo "<script>alert('Chỉ được đánh giá khi đơn hàng đã hoàn thành.'); window.history.back();</script>";
+            exit();
+        }
+
+        $isReviewed = $orderModel->checkProductReviewed($productId, $orderId);
+        if ($isReviewed) {
+            echo "<script>alert('Bạn đã đánh giá sản phẩm này rồi!'); window.history.back();</script>";
+            exit();
+        }
+
+        // 4. Thêm đánh giá
+        $reviewData = [
+            'product_id' => $productId,
+            'user_id' => $userId,
+            'order_id' => $orderId,
+            'rating' => $rating,
+            'comment' => $comment
+        ];
+
+        $result = $orderModel->addReview($reviewData);
+
+        if ($result) {
+            echo "<script>alert('Cảm ơn bạn đã đánh giá sản phẩm!'); window.location.href='?action=profile';</script>";
+        } else {
+            echo "<script>alert('Có lỗi xảy ra, vui lòng thử lại!'); window.history.back();</script>";
+        }
+    }
 }
 }

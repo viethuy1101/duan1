@@ -1,24 +1,21 @@
 <?php
 namespace controllers\admin;
 
-// Nạp file class cha - Hãy chắc chắn đường dẫn này đúng trong dự án của m
 require_once "controllers/admin/BaseAdminController.php";
 
 class ReviewController extends BaseAdminController {
     
     public function __construct() {
-        // Kiểm tra xem class cha có tồn tại không để tránh lỗi
         if (!class_exists('controllers\admin\BaseAdminController')) {
             require_once "controllers/admin/BaseAdminController.php";
         }
         parent::__construct();
     }
 
-    // Trong index() của ReviewController.php
 public function index() {
     $db = connectDB();
     
-    // Thống kê sơ bộ
+
     $countSql = "SELECT 
         COUNT(*) as total, 
         SUM(CASE WHEN status = 'show' THEN 1 ELSE 0 END) as showing,

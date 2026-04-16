@@ -34,6 +34,14 @@ class Product {
     }
 
     public function update($id, $data) {
+        $title = $data['title'] ?? '';
+        $price = $data['price'] ?? 0;
+        $image = $data['image'] ?? null;
+        $stock = $data['stock'] ?? 0;
+        $description = $data['description'] ?? null;
+        $author = $data['author'] ?? null;
+        $category_id = $data['category_id'] ?? null;
+
         $sql = "UPDATE books SET 
                     title = ?, 
                     price = ?, 
@@ -45,13 +53,13 @@ class Product {
                 WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([
-            $data['title'], 
-            $data['price'], 
-            $data['image'], 
-            $data['stock'],
-            $data['description'] ?? null,
-            $data['author'] ?? null,
-            $data['category_id'] ?? null,
+            $title,
+            $price,
+            $image,
+            $stock,
+            $description,
+            $author,
+            $category_id,
             $id
         ]);
     }
@@ -59,6 +67,17 @@ class Product {
     public function delete($table, $id) {
         $stmt = $this->conn->prepare("DELETE FROM $table WHERE id=?");
         return $stmt->execute([$id]);
+    }
+
+    public function deleteVariantsByProductId($product_id) {
+        $stmt = $this->conn->prepare("DELETE FROM product_variants WHERE product_id = ?");
+        return $stmt->execute([$product_id]);
+    }
+
+    public function hasOrderReferences($product_id) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM order_details WHERE book_id = ?");
+        $stmt->execute([$product_id]);
+        return $stmt->fetchColumn() > 0;
     }
 
     public function countAll($table) {
@@ -84,9 +103,15 @@ class Product {
     }
 
     public function addVariant($product_id, $name, $price, $stock) {
-        $sql = "INSERT INTO product_variants (product_id, variant_name, price, stock) VALUES (?, ?, ?, ?)";
-        return $this->conn->prepare($sql)->execute([$product_id, $name, $price, $stock]);
-    }
+    $product_id = (int) $product_id;
+    $price      = (float) $price;
+    $stock      = (int) $stock; 
+
+    $sql = "INSERT INTO product_variants (product_id, variant_name, price, stock) VALUES (?, ?, ?, ?)";
+    
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$product_id, $name, $price, $stock]);
+}
 
     public function getVariantsByProductId($productId) {
         $sql = "SELECT * FROM product_variants WHERE product_id = ?";
