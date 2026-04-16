@@ -103,7 +103,7 @@
                         </td>
                         <td>
                             <div class="badge bg-danger bg-opacity-10 text-danger fw-bold fs-6 px-3 py-2 rounded-3">
-                                <?= number_format($o['total_price']) ?>đ
+                                <?= number_format($o['total_money']) ?>đ
                             </div>
                         </td>
 <td>

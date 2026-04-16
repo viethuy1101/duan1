@@ -130,7 +130,7 @@
                         <tr>
                             <td colspan="3" class="border-0"></td>
                             <td class="text-end py-2 text-muted">Tổng tiền sách:</td>
-                            <td class="text-end py-2 pe-4 fw-bold"><?= number_format($order['total_price']) ?>đ</td>
+                            <td class="text-end py-2 pe-4 fw-bold"><?= number_format($order['total_money']) ?>đ</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="border-0"></td>
@@ -146,7 +146,7 @@
                             <td colspan="3" class="border-0"></td>
                             <td class="text-end py-3 fw-bold text-uppercase">Thực thu (Tổng thanh toán):</td>
                             <td class="text-end py-3 pe-4 fw-bold fs-4 text-warning">
-                                <?= number_format($order['total_price'] - 20000) ?>đ
+                                <?= number_format($order['total_money'] - 20000) ?>đ
                             </td>
                         </tr>
                     </tfoot>

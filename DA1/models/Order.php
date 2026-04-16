@@ -36,12 +36,12 @@ class Order extends BaseModel {
     }
 
     public function sumTotalRevenue() {
-        $revenue = $this->pdo->query("SELECT SUM(total_price) FROM orders WHERE status = 'Completed'")->fetchColumn();
+        $revenue = $this->pdo->query("SELECT SUM(total_money) FROM orders WHERE status = 'Completed'")->fetchColumn();
         return $revenue ? $revenue : 0;
     }
 
     public function getAllOrdersForExport() {
-        $sql = "SELECT id, receiver_name, total_price, status, created_at FROM orders ORDER BY id DESC";
+        $sql = "SELECT id, fullname as receiver_name, total_money as total_price, status, created_at FROM orders ORDER BY id DESC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);

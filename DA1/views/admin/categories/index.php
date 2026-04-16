@@ -3,95 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Danh Mục - Book Verse</title>
+    <title>Quản lý Danh Mục - BookVerse Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
-        .card-custom { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-        
-        /* Table Styling */
+        :root {
+            --primary-color: #4f46e5;
+            --success-color: #10b981;
+            --bg-body: #f8fafc;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: #1e293b;
+        }
+
+        /* Đồng bộ Header Box giống Dashboard */
+        .vip-header-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Đồng bộ Card Table */
+        .card-custom { 
+            border: none; 
+            border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); 
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Table Styling VIP */
         .table thead th { 
-            background-color: #ffffff; 
+            background-color: #fcfcfd; 
             font-size: 11px; 
             text-transform: uppercase; 
-            letter-spacing: 1px; 
-            color: #94a3b8; 
-            padding: 20px;
+            font-weight: 700;
+            color: #64748b; 
+            padding: 20px 24px;
             border-bottom: 1px solid #f1f5f9;
         }
-        .table tbody td { padding: 18px 20px; border-bottom: 1px solid #f8fafc; }
-        .table tbody tr:hover { background-color: #fbfcfd; }
 
-        /* Badge Styling */
+        .table tbody td { 
+            padding: 20px 24px; 
+            border-bottom: 1px solid #f8fafc; 
+            font-size: 14px;
+        }
+
+        .table tbody tr:hover { background-color: #f8faff; }
+
+        /* Badge ID chuẩn màu Indigo của m */
         .cat-id-badge { 
-            background: #f0f3ff; 
-            color: #4f46e5; 
-            font-weight: 700; 
-            padding: 5px 12px; 
-            border-radius: 6px; 
+            background: #eef2ff; 
+            color: #4338ca; 
+            font-weight: 800; 
+            padding: 6px 14px; 
+            border-radius: 10px; 
             font-size: 11px; 
+            border: 1px solid #e0e7ff;
         }
+
+        /* Badge Số lượng */
         .book-count-badge {
-            background: #ffffff;
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
-            color: #64748b;
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
+            color: #475569;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 600;
         }
 
-        /* Status Badge */
-        .status-active { background-color: #ecfdf5; color: #10b981; }
-        .status-inactive { background-color: #fef2f2; color: #ef4444; }
+        /* Status Badge đồng bộ */
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-active { background: #dcfce7; color: #15803d; }
+        .status-inactive { background: #fee2e2; color: #b91c1c; }
 
-        /* Action Buttons */
+        /* Nút thao tác hiện đại */
         .btn-action { 
-            width: 34px; 
-            height: 34px; 
+            width: 38px; 
+            height: 38px; 
             display: inline-flex; 
             align-items: center; 
             justify-content: center; 
-            border-radius: 8px; 
-            transition: 0.2s; 
+            border-radius: 12px; 
+            transition: 0.3s; 
             border: 1px solid #f1f5f9;
             background: #ffffff;
+            text-decoration: none;
         }
-        .btn-edit { color: #3b82f6; }
-        .btn-edit:hover { background: #eff6ff; border-color: #dbeafe; }
-        .btn-delete { color: #f87171; }
-        .btn-delete:hover { background: #fef2f2; border-color: #fee2e2; }
+        .btn-edit { color: #4f46e5; }
+        .btn-edit:hover { background: #4f46e5; color: white; border-color: #4f46e5; transform: translateY(-2px); }
+        .btn-delete { color: #ef4444; }
+        .btn-delete:hover { background: #ef4444; color: white; border-color: #ef4444; transform: translateY(-2px); }
 
-        /* Add Button - Chuẩn màu xanh lá của m */
-        .btn-add-custom {
-            background-color: #108548;
+        /* Nút thêm mới chuẩn Gradient mượt */
+        .btn-add-vip {
+            background: linear-gradient(135deg, #4f46e5 0%, #764ba2 100%);
             color: #ffffff;
-            border-radius: 50px;
-            padding: 10px 24px;
-            font-weight: 500;
+            border-radius: 16px;
+            padding: 12px 28px;
+            font-weight: 600;
             font-size: 14px;
             border: none;
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
-        .btn-add-custom:hover {
-            background-color: #0d6e3c;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 133, 72, 0.2);
-            color: #ffffff;
+        .btn-add-vip:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+            filter: brightness(1.1);
         }
     </style>
 </head>
 <body>
 
-<div class="container-fluid py-5 px-4">
-    <div class="d-flex justify-content-between align-items-center mb-5">
+<div class="container-fluid py-5 px-lg-5">
+    <div class="vip-header-box d-flex flex-column flex-md-row justify-content-between align-items-md-center">
         <div>
-            <h2 class="fw-bold text-dark mb-1" style="letter-spacing: -0.5px;">Cấu hình Danh Mục</h2>
-            <p class="text-muted small mb-0">Quản lý và phân loại các đầu sách trong hệ thống</p>
+            <h2 class="fw-bold text-dark mb-1" style="letter-spacing: -1px;">Danh Mục Sách</h2>
+            <p class="text-muted small mb-0">Hệ thống phân loại dữ liệu BookVerse</p>
         </div>
-        <a href="?action=admin/category/create" class="btn btn-add-custom shadow-sm">
-            <i class="bi bi-plus-circle me-2"></i> Thêm Danh Mục Mới
-        </a>
+        <div class="mt-3 mt-md-0">
+            <a href="?action=admin/category/create" class="btn btn-add-vip">
+                <i class="bi bi-plus-lg me-2"></i> Thêm Danh Mục
+            </a>
+        </div>
     </div>
 
     <div class="card card-custom">
@@ -100,49 +153,48 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
-                            <th width="180px">Mã định danh</th>
-                            <th>Tên danh mục</th>
+                            <th width="150px" class="ps-5">Mã ID</th>
+                            <th>Thông tin danh mục</th>
                             <th class="text-center">Số lượng sách</th>
                             <th class="text-center">Trạng thái</th>
-                            <th class="text-end pe-5">Thao tác</th>
+                            <th class="text-end pe-5">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($categories as $cat): ?>
                         <tr>
-                            <td class="ps-4">
-                                <span class="cat-id-badge">CAT-<?= $cat['id'] ?></span>
+                            <td class="ps-5">
+                                <span class="cat-id-badge">ID-<?= $cat['id'] ?></span>
                             </td>
                             <td>
-                                <div class="fw-bold text-dark mb-0"><?= $cat['name'] ?></div>
-                                <div class="text-muted" style="font-size: 11px;">ID Hệ thống: #<?= $cat['id'] ?></div>
+                                <div class="fw-bold text-dark mb-0 fs-6"><?= $cat['name'] ?></div>
+                                <div class="text-muted" style="font-size: 11px;">Hệ thống BookVerse</div>
                             </td>
                             <td class="text-center">
                                 <div class="book-count-badge d-inline-flex align-items-center">
-                                    <i class="bi bi-book-half me-2 opacity-50"></i> <?= $cat['total_books'] ?? 0 ?> cuốn
+                                    <i class="bi bi-collection-play me-2 text-primary"></i> 
+                                    <?= $cat['total_books'] ?? 0 ?> sản phẩm
                                 </div>
                             </td>
                             <td class="text-center">
                                 <?php if (($cat['status'] ?? 1) == 1): ?>
-                                    <span class="badge status-active px-3 py-2 rounded-pill fw-medium" style="font-size: 10px;">
-                                        <i class="bi bi-dot fs-5 align-middle"></i> Đang hoạt động
+                                    <span class="status-pill status-active">
+                                        <i class="bi bi-check-circle-fill"></i> Hiển thị
                                     </span>
                                 <?php else: ?>
-                                    <span class="badge status-inactive px-3 py-2 rounded-pill fw-medium" style="font-size: 10px;">
-                                        <i class="bi bi-dot fs-5 align-middle"></i> Tạm ngưng
+                                    <span class="status-pill status-inactive">
+                                        <i class="bi bi-dash-circle-fill"></i> Đang ẩn
                                     </span>
                                 <?php endif; ?>
                             </td>
                             <td class="pe-5 text-end">
                                 <a href="?action=admin/category/edit&id=<?= $cat['id'] ?>" 
-                                   class="btn-action btn-edit me-2" 
-                                   title="Chỉnh sửa">
+                                   class="btn-action btn-edit me-2" title="Sửa">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 <a href="?action=admin/category/delete&id=<?= $cat['id'] ?>" 
                                    class="btn-action btn-delete"
-                                   onclick="return confirm('Cảnh báo: Xóa danh mục này có thể ảnh hưởng đến các sách liên quan!')"
-                                   title="Xóa">
+                                   onclick="return confirm('Xác nhận xóa danh mục này?')" title="Xóa">
                                     <i class="bi bi-trash3"></i>
                                 </a>
                             </td>
@@ -153,14 +205,16 @@
             </div>
         </div>
         
-        <div class="card-footer bg-white py-4 border-0 px-4">
+        <div class="card-footer bg-white py-4 border-0 px-5">
             <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Hiển thị tất cả <strong><?= count($categories) ?></strong> danh mục hiện có</span>
+                <span class="text-muted small font-weight-bold">
+                    Tổng số: <span class="text-dark fw-bold"><?= count($categories) ?></span> danh mục
+                </span>
                 <nav>
                     <ul class="pagination pagination-sm mb-0">
-                        <li class="page-item disabled"><a class="page-link border-0 bg-light rounded-start-pill px-3" href="#">Trước</a></li>
-                        <li class="page-item active"><a class="page-link border-0 px-3" href="#" style="background-color: #3b82f6;">1</a></li>
-                        <li class="page-item"><a class="page-link border-0 bg-light rounded-end-pill px-3" href="#">Sau</a></li>
+                        <li class="page-item"><a class="page-link border-0 bg-light rounded-3 px-3 me-2 text-dark" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link border-0 rounded-3 px-3 me-2 shadow-sm" href="#" style="background: #4f46e5;">1</a></li>
+                        <li class="page-item"><a class="page-link border-0 bg-light rounded-3 px-3 text-dark" href="#">Sau</a></li>
                     </ul>
                 </nav>
             </div>
