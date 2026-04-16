@@ -71,4 +71,21 @@ class Order extends BaseModel {
     $stmtOrder = $this->pdo->prepare($sqlOrder);
     return $stmtOrder->execute([$id]);
 }
+
+    // Lấy danh sách đơn hàng của một user
+    public function getOrdersByUserId($userId) {
+        $sql = "SELECT * FROM {$this->table} WHERE user_id = ? ORDER BY created_at DESC";
+        return $this->query($sql, [$userId])->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // 2. Lấy chi tiết từng cuốn sách trong 1 đơn hàng cụ thể
+    // Dùng cho cả Client xem chi tiết và Admin quản lý
+    public function getOrderDetails($orderId) {
+        $sql = "SELECT od.*, b.title as product_name, b.image as product_image 
+                FROM order_details od
+                JOIN books b ON od.book_id = b.id 
+                WHERE od.order_id = ?";
+        
+        return $this->query($sql, [$orderId])->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

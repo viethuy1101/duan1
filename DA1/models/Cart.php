@@ -1,5 +1,7 @@
 <?php
 
+namespace models;
+
 require_once PATH_MODEL . 'BaseModel.php';
 
 class Cart extends BaseModel
