@@ -155,4 +155,10 @@ public function insertWithVariants($productData, $variants) {
         return false;
     }
 }
+
+    public function getByCategory($category_id) {
+        $stmt = $this->conn->prepare("SELECT * FROM books WHERE category_id = ? ORDER BY id DESC");
+        $stmt->execute([$category_id]);
+        return $stmt->fetchAll();
+    }
 }

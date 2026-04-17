@@ -19,6 +19,8 @@ match ($action) {
     'admin', 'admin/dashboard' => (new DashboardController())->index(),
     'admin/order'               => (new OrderController())->index(),
     'admin/order/detail'        => (new OrderController())->detail(),
+    'admin/order/export'        => (new OrderController())->export(),
+    'admin/order/print'         => (new OrderController())->printInvoice(),
     'admin/order/update-status' => (new OrderController())->updateStatus(),
     'admin/order/delete'        => (new OrderController())->delete(),
 
@@ -48,10 +50,11 @@ match ($action) {
     'admin/category/delete'  => (new CategoryController())->delete(),
 
     // Biến thể & Đánh giá
-    'admin/product/variants' => (new ProductController())->variants($_GET['id']),
-    'admin/reviews'          => (new ReviewController())->index(),
-    'admin/review/delete'    => (new ReviewController())->delete(),
-    'admin/review/toggle'    => (new ReviewController())->toggleStatus(),
+    'admin/product/variants'       => (new ProductController())->variants($_GET['id']),
+    'admin/product/delete-variant' => (new ProductController())->deleteVariant(),
+    'admin/reviews'                => (new ReviewController())->index(),
+    'admin/review/delete'          => (new ReviewController())->delete(),
+    'admin/review/toggle'          => (new ReviewController())->toggleStatus(),
 
     default => die("404 ADMIN: Không tìm thấy hành động $action"),
 };

@@ -264,6 +264,11 @@ body {
                     <a href="<?= BASE_URL ?>?action=detail&id=<?= $id ?>" class="product-link">
                       <?= $item['name'] ?>
                     </a>
+                    <?php if (!empty($item['variant_name'])): ?>
+                      <small style="display: block; color: #777; font-weight: normal; margin-top: 4px;">
+                        Biến thể: <strong><?= htmlspecialchars($item['variant_name']) ?></strong>
+                      </small>
+                    <?php endif; ?>
                   </td>
                   <td class="cart-price">
                     <span class="price"><?= number_format($item['price']) ?> đ</span>

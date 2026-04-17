@@ -29,9 +29,9 @@
                 <p class="text-muted mb-0"><i class="far fa-calendar-alt me-1"></i> Ngày đặt: <?= date('d/m/Y H:i', strtotime($order['created_at'])) ?></p>
             </div>
             <div class="print-hide">
-                <button onclick="window.print()" class="btn btn-dark px-4 rounded-pill shadow-sm fw-bold">
-                    <i class="fas fa-print me-2"></i>In hóa đơn PDF
-                </button>
+                <a href="?action=admin/order/print&id=<?= $order['id'] ?>" class="btn btn-dark px-4 rounded-pill shadow-sm fw-bold" title="Tải xuống hóa đơn PDF">
+                    <i class="fas fa-download me-2"></i>In hóa đơn PDF
+                </a>
             </div>
         </div>
 

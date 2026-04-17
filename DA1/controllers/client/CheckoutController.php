@@ -17,6 +17,12 @@ class CheckoutController {
 
     // Hiển thị trang thanh toán
     public function index() {
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (!isset($_SESSION['user'])) {
+            header("Location: " . BASE_URL . "?action=login");
+            exit();
+        }
+
         $currentUser = null;
         if (isset($_SESSION['user'])) {
             // Lấy dữ liệu mới nhất từ DB (bao gồm phone, address vừa thêm)
@@ -37,6 +43,12 @@ class CheckoutController {
 
     // Xử lý lưu đơn hàng
     public function process() {
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (!isset($_SESSION['user'])) {
+            header("Location: " . BASE_URL . "?action=login");
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn_place_order'])) {
             $fullname = $_POST['fullname'] ?? '';
             $phone    = $_POST['phone'] ?? '';
