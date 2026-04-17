@@ -104,4 +104,31 @@ class OrderController extends BaseAdminController {
     header("Location: ?action=admin/order");
     exit;
 }
+
+    public function printInvoice() {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            die("Không tìm thấy đơn hàng!");
+        }
+
+        $order = $this->model->find($id);
+        $order_details = $this->model->getOrderDetails($id);
+
+        if (!$order) {
+            die("Đơn hàng không tồn tại!");
+        }
+
+        // Tính tổng tiền
+        $subtotal = 0;
+        foreach ($order_details as $item) {
+            $subtotal += $item['price'] * $item['quantity'];
+        }
+        $shipping = 30000;
+        $total = $subtotal + $shipping;
+
+        // Load view
+        header('Content-Type: text/html; charset=utf-8');
+        include_once PATH_VIEW . 'admin/order/print.php';
+        exit;
+    }
 }

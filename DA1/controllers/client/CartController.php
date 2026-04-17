@@ -18,6 +18,7 @@ class CartController
 
             $id = $_POST['id'];
             $qty = $_POST['quantity'];
+            $variantId = $_POST['variant_id'] ?? null;
 
             // gọi model
             require_once PATH_MODEL . 'Product.php';
@@ -28,19 +29,40 @@ class CartController
                 die("Sản phẩm không tồn tại");
             }
 
+            // Lấy giá: nếu có variant thì lấy giá variant, không thì lấy giá sản phẩm
+            $price = $product['price'];
+            $variantName = '';
+            
+            if ($variantId) {
+                $db = connectDB();
+                $stmt = $db->prepare("SELECT * FROM product_variants WHERE id = ? AND product_id = ?");
+                $stmt->execute([$variantId, $id]);
+                $variant = $stmt->fetch();
+                
+                if ($variant) {
+                    $price = $variant['price'];
+                    $variantName = $variant['variant_name'];
+                }
+            }
+
             // nếu chưa có giỏ
             if (!isset($_SESSION['cart'])) {
                 $_SESSION['cart'] = [];
             }
 
+            // Tạo key duy nhất cho combo product + variant
+            $cartKey = $variantId ? $id . '_' . $variantId : $id;
+
             // nếu đã tồn tại → cộng thêm
-            if (isset($_SESSION['cart'][$id])) {
-                $_SESSION['cart'][$id]['quantity'] += $qty;
+            if (isset($_SESSION['cart'][$cartKey])) {
+                $_SESSION['cart'][$cartKey]['quantity'] += $qty;
             } else {
-                $_SESSION['cart'][$id] = [
+                $_SESSION['cart'][$cartKey] = [
                     'id' => $id,
+                    'variant_id' => $variantId,
                     'name' => $product['title'],
-                    'price' => $product['price'],
+                    'variant_name' => $variantName,
+                    'price' => $price,
                     'image' => $product['image'],
                     'quantity' => $qty
                 ];

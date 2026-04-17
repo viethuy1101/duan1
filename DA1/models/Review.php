@@ -32,4 +32,10 @@ class ReviewController extends BaseAdminController {
     }
     header("Location: ?action=admin/reviews");
 }
+public function getReviewsByProduct($product_id) {
+    $sql = "SELECT r.*, u.username FROM reviews r 
+            JOIN users u ON r.user_id = u.id 
+            WHERE r.product_id = ? AND r.status = 'show'";
+    return $this->query($sql, [$product_id])->fetchAll();
+}
 }

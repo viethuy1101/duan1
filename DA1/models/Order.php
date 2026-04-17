@@ -12,7 +12,7 @@ class Order extends BaseModel {
     }
 
     public function getOrderDetails($orderId) {
-        $sql = "SELECT od.*, b.title as product_name, b.image 
+        $sql = "SELECT od.*, b.title as product_name, b.image
                 FROM order_details od 
                 JOIN books b ON od.book_id = b.id 
                 WHERE od.order_id = ?";
@@ -129,7 +129,7 @@ class Order extends BaseModel {
                 foreach ($cartItems as $item) {
                     $stmtDetail->execute([
                         $orderId,
-                        $item['product_id'] ?? $item['id'],
+                        $item['id'],
                         $item['quantity'] ?? 1,
                         $item['price'] ?? 0
                     ]);

@@ -23,7 +23,7 @@
     
     <hr class="mx-3 my-4 opacity-25">
     
-    <a href="?action=client" class="menu-item">
+    <a href="<?= BASE_URL ?>" class="menu-item">
         <i class="bi bi-house me-2"></i> <span>Về Trang Chủ</span>
     </a>
 </div>
